@@ -171,7 +171,7 @@ namespace ArceliaHR
             empReligion.DataBindings.Add("Text", _bs, "Religion");
             empMarital.DataBindings.Add("Text", _bs, "MaritalStatus");
             empGender.DataBindings.Add("Text", _bs, "Gender");
-            empDOB.DataBindings.Add("Value", _bs, "DateOfBirth");
+            BindDate(empDOB, "DateOfBirth");
 
             EmpMobile.DataBindings.Add("Text", _bs, "Mobile");
             empICE.DataBindings.Add("Text", _bs, "ICEContact");
@@ -179,17 +179,43 @@ namespace ArceliaHR
             empRelation.DataBindings.Add("Text", _bs, "Relation");
 
             passportNumber.DataBindings.Add("Text", _bs, "PassportNumber");
-            passportIssueDate.DataBindings.Add("Value", _bs, "PassportIssueDate");
-            passportExpiryDate.DataBindings.Add("Value", _bs, "PassportExpiryDate");
+            BindDate(passportIssueDate, "PassportIssueDate");
+            BindDate(passportExpiryDate, "PassportExpiryDate");
 
             IDNumber.DataBindings.Add("Text", _bs, "IDNumber");
             IDCardNumber.DataBindings.Add("Text", _bs, "IDCardNumber");
-            IDExpiryDate.DataBindings.Add("Value", _bs, "IDExpiryDate");
+            BindDate(IDExpiryDate, "IDExpiryDate");
 
             txtWork.DataBindings.Add("Text", _bs, "Work");
             cmbDepart.DataBindings.Add("Text", _bs, "Department");
 
             txtStatus.DataBindings.Add("Text", _bs, "Status");
+        }
+        private void BindDate(DateTimePicker picker, string propertyName)
+        {
+            // initial display
+            picker.Format = DateTimePickerFormat.Custom;
+            picker.CustomFormat = " "; // show blank if null
+            picker.ShowCheckBox = true;
+
+            // bind the Value with null handling
+            picker.DataBindings.Add("Value", _bs, propertyName, true, DataSourceUpdateMode.OnPropertyChanged, null);
+
+            // handle user checking/unchecking the checkbox
+            picker.ValueChanged += (s, e) =>
+            {
+                var prop = typeof(EmployeeModel).GetProperty(propertyName);
+                if (picker.Checked)
+                {
+                    prop.SetValue(_employee, picker.Value);
+                    picker.CustomFormat = "dd/MM/yyyy";
+                }
+                else
+                {
+                    prop.SetValue(_employee, null);
+                    picker.CustomFormat = " ";
+                }
+            };
         }
 
     }

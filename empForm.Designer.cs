@@ -246,10 +246,11 @@
             // 
             // empDOB
             // 
-            empDOB.Format = DateTimePickerFormat.Short;
+            empDOB.Format = DateTimePickerFormat.Custom;
             empDOB.Location = new Point(316, 96);
             empDOB.Margin = new Padding(4, 3, 4, 3);
             empDOB.Name = "empDOB";
+            empDOB.ShowCheckBox = true;
             empDOB.Size = new Size(81, 23);
             empDOB.TabIndex = 5;
             // 
@@ -391,19 +392,21 @@
             // 
             // passportExpiryDate
             // 
-            passportExpiryDate.Format = DateTimePickerFormat.Short;
+            passportExpiryDate.Format = DateTimePickerFormat.Custom;
             passportExpiryDate.Location = new Point(121, 83);
             passportExpiryDate.Margin = new Padding(4, 3, 4, 3);
             passportExpiryDate.Name = "passportExpiryDate";
+            passportExpiryDate.ShowCheckBox = true;
             passportExpiryDate.Size = new Size(132, 23);
             passportExpiryDate.TabIndex = 15;
             // 
             // passportIssueDate
             // 
-            passportIssueDate.Format = DateTimePickerFormat.Short;
+            passportIssueDate.Format = DateTimePickerFormat.Custom;
             passportIssueDate.Location = new Point(121, 53);
             passportIssueDate.Margin = new Padding(4, 3, 4, 3);
             passportIssueDate.Name = "passportIssueDate";
+            passportIssueDate.ShowCheckBox = true;
             passportIssueDate.Size = new Size(132, 23);
             passportIssueDate.TabIndex = 14;
             // 
@@ -452,10 +455,11 @@
             // 
             // IDExpiryDate
             // 
-            IDExpiryDate.Format = DateTimePickerFormat.Short;
+            IDExpiryDate.Format = DateTimePickerFormat.Custom;
             IDExpiryDate.Location = new Point(124, 83);
             IDExpiryDate.Margin = new Padding(4, 3, 4, 3);
             IDExpiryDate.Name = "IDExpiryDate";
+            IDExpiryDate.ShowCheckBox = true;
             IDExpiryDate.Size = new Size(132, 23);
             IDExpiryDate.TabIndex = 18;
             // 
