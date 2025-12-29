@@ -150,7 +150,7 @@
             btnDatabseTest.Name = "btnDatabseTest";
             btnDatabseTest.Size = new Size(98, 35);
             btnDatabseTest.Text = "DataBase Test";
-            btnDatabseTest.Click += btnDatabseTest_Click;
+            //btnDatabseTest.Click += btnDatabseTest_Click;
             // 
             // panelGrid
             // 
@@ -208,7 +208,6 @@
         private ToolStripButton btnDelEmp;
         private ToolStripButton btnFiles;
         private ToolStripButton btnAttend;
-        private ToolStripButton btnSalary;
         private ToolStripSeparator toolStripSeparator1;
         private ToolStripTextBox txtSearch;
         private ToolStripComboBox cmbSearch;

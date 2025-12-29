@@ -1,7 +1,5 @@
 ﻿using ArceliaHR.Models;
 using Dapper;
-using System.Collections.Generic;
-using System.Linq;
 using static ArceliaHR.Database.DbServices;
 
 namespace ArceliaHR.Database.Repositories
@@ -38,7 +36,7 @@ namespace ArceliaHR.Database.Repositories
             );
         }
 
-        public EmployeeModel GetById(int id)
+        public EmployeeModel? GetById(int id)
         {
             using var conn = DbContext.Open();
 

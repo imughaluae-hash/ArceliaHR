@@ -63,7 +63,7 @@ namespace ArceliaHR.Database
                 Picture BLOB,
                 Status TEXT
                  );");
-            }    
+            }
         }
     }
 }

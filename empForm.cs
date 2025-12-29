@@ -1,16 +1,14 @@
-﻿using ArceliaHR.Database;
-using ArceliaHR.Database.Repositories;
+﻿using ArceliaHR.Database.Repositories;
 using ArceliaHR.Models;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Windows.Forms;
 
 namespace ArceliaHR
 {
     public partial class EmpForm : Form
     {
-        private int? _employeeId = null;
+
+
         public EmpForm(int employeeId) : this()
         {
             _employeeId = employeeId;
@@ -19,40 +17,12 @@ namespace ArceliaHR
         {
             InitializeComponent();
         }
-        private EmployeeModel _employee;
+        private int? _employeeId;
+        private EmployeeModel? _employee;
         private BindingSource _bs = new BindingSource();
-        public string fileName;
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //Personal Information
-            string empID = empId.Text;
-            string empl = empName.Text;
-            string empFatherX = empFather.Text;
-            string empReligionX = empReligion.Text;
-            DateTime empDOBx = empDOB.Value;
-            string EmpShadix = empMarital.Text;
-            string empSexX = empGender.Text;
-            string EmpMobileX = EmpMobile.Text;
-            string empCountryX = empNationality.Text;
-            string empICEX = empICE.Text;
-            string empHomeNumberX = empRelation.Text;
-            //string empPicture.Image;
+        public string? fileName;
+        private bool _isNewEmployee;
 
-            //Passport Information
-            string passportNumberX = passportNumber.Text;
-            DateTime passportIssueDateX = passportIssueDate.Value;
-            DateTime passportExpiryDateX = passportExpiryDate.Value;
-
-            //ID Card Information
-            string IDCardNumberX = IDCardNumber.Text;
-            string IDNumberX = IDNumber.Text;
-            DateTime IDExpiryDateX = IDExpiryDate.Value;
-
-            //Visa Information
-            string work = txtWork.Text;
-            string Department = cmbDepart.Text;
-
-        }
 
         private void browseImage_Click(object sender, EventArgs e)
         {
@@ -78,13 +48,12 @@ namespace ArceliaHR
             bool rVal = false;
             foreach (Control c in this.Controls)
             {
-                if (c is TextBox)
+                if (c is TextBox textBox)
                 {
-                    using TextBox textBox = (TextBox)c;
-                    if (textBox.Text == string.Empty)
+                    if (string.IsNullOrWhiteSpace(textBox.Text))
                     {
-                        rVal = true;
                         MessageBox.Show("Empty");
+                        return true;
                     }
                 }
             }
@@ -157,10 +126,15 @@ namespace ArceliaHR
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            if (_employee == null)
+            {
+                MessageBox.Show("Employee data is not loaded.");
+                return;
+            }
             var repo = new EmployeeRepository();
             _employee.Picture = ImageToBytes(empPicture.Image);
 
-            if (_employee.Id == 0)
+            if (_isNewEmployee)
             {
                 repo.Add(_employee);
                 MessageBox.Show("Employee added");
@@ -183,7 +157,7 @@ namespace ArceliaHR
 
             txtStatus.Text = _employee.Status;
         }
-        private byte[] ImageToBytes(Image img)
+        private byte[]? ImageToBytes(Image img)
         {
             if (img == null) return null;
 
@@ -201,11 +175,13 @@ namespace ArceliaHR
             if (_employeeId.HasValue)
             {
                 LoadEmployee(_employeeId.Value);
+                _isNewEmployee = false;
                 btnSave.Text = "Update";
             }
             else
             {
                 _employee = new EmployeeModel { Status = "Active" };
+                _isNewEmployee = true;
                 _bs.DataSource = _employee;
                 BindControls();
             }
@@ -214,26 +190,19 @@ namespace ArceliaHR
         private void LoadEmployee(int employeeId)
         {
             var repo = new EmployeeRepository();
-            var emp = repo.GetById(employeeId);
 
-            if (emp == null)
-            {
-                MessageBox.Show("Employee not found.");
-                Close();
-                return;
-            }
+            _employee = repo.GetById(employeeId)
+                ?? throw new InvalidOperationException("Employee not found");
 
-            _employee = emp;
             _bs.DataSource = _employee;
 
             BindControls();
-
             LoadEmployeePicture();
         }
         private void LoadEmployeePicture()
         {
 
-            if (_employee.Picture == null || _employee.Picture.Length == 0)
+            if (_employee?.Picture == null || _employee.Picture.Length == 0)
                 return;
 
             using var ms = new MemoryStream(_employee.Picture);
@@ -276,30 +245,46 @@ namespace ArceliaHR
         }
         private void BindDate(DateTimePicker picker, string propertyName)
         {
-            // initial display
+            picker.ValueChanged -= DatePicker_ValueChanged;
+
             picker.Format = DateTimePickerFormat.Custom;
-            picker.CustomFormat = " "; // show blank if null
+            picker.CustomFormat = " ";
             picker.ShowCheckBox = true;
 
-            // bind the Value with null handling
-            picker.DataBindings.Add("Value", _bs, propertyName, true, DataSourceUpdateMode.OnPropertyChanged, null);
+            picker.DataBindings.Add(
+                "Value",
+                _bs,
+                propertyName,
+                true,
+                DataSourceUpdateMode.OnPropertyChanged,
+                null
+            );
 
-            // handle user checking/unchecking the checkbox
-            picker.ValueChanged += (s, e) =>
-            {
-                var prop = typeof(EmployeeModel).GetProperty(propertyName);
-                if (picker.Checked)
-                {
-                    prop.SetValue(_employee, picker.Value);
-                    picker.CustomFormat = "dd/MM/yyyy";
-                }
-                else
-                {
-                    prop.SetValue(_employee, null);
-                    picker.CustomFormat = " ";
-                }
-            };
+            picker.Tag = propertyName; // store property name safely
+            picker.ValueChanged += DatePicker_ValueChanged;
         }
+
+        private void DatePicker_ValueChanged(object? sender, EventArgs e)
+        {
+            if (_employee == null) return;
+            if (sender is not DateTimePicker picker) return;
+            if (picker.Tag is not string propertyName) return;
+
+            var prop = typeof(EmployeeModel).GetProperty(propertyName);
+            if (prop == null) return;
+
+            if (picker.Checked)
+            {
+                prop.SetValue(_employee, picker.Value);
+                picker.CustomFormat = "dd/MM/yyyy";
+            }
+            else
+            {
+                prop.SetValue(_employee, null);
+                picker.CustomFormat = " ";
+            }
+        }
+
 
     }
 }

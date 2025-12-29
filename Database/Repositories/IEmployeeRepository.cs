@@ -6,8 +6,8 @@ namespace ArceliaHR.Database.Repositories
     {
         void Add(EmployeeModel employee);
         IEnumerable<EmployeeModel> GetAll();
-        EmployeeModel GetById(int id);
-        void Delete(int  id);
+        EmployeeModel? GetById(int id);
+        void Delete(int id);
         void Update(EmployeeModel employee);
     }
 
