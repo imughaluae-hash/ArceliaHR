@@ -8,6 +8,7 @@ namespace ArceliaHR.Database.Repositories
         IEnumerable<EmployeeModel> GetAll();
         EmployeeModel GetById(int id);
         void Delete(int  id);
+        void Update(EmployeeModel employee);
     }
 
 }

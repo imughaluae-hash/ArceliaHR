@@ -57,5 +57,40 @@ namespace ArceliaHR.Database.Repositories
                 new { Id = id }
             );
         }
+        public void Update(EmployeeModel employee)
+        {
+            using var conn = DbContext.Open();
+
+            conn.Execute(@"
+        UPDATE Employees SET
+            Name = @Name,
+            FatherName = @FatherName,
+            Religion = @Religion,
+            MaritalStatus = @MaritalStatus,
+            Gender = @Gender,
+            DateOfBirth = @DateOfBirth,
+
+            Mobile = @Mobile,
+            ICEContact = @ICEContact,
+            Nationality = @Nationality,
+            Relation = @Relation,
+
+            PassportNumber = @PassportNumber,
+            PassportIssueDate = @PassportIssueDate,
+            PassportExpiryDate = @PassportExpiryDate,
+
+            IDNumber = @IDNumber,
+            IDCardNumber = @IDCardNumber,
+            IDExpiryDate = @IDExpiryDate,
+
+            Work = @Work,
+            Department = @Department,
+            Picture = @Picture,
+            Status = @Status
+        WHERE Id = @Id
+    ", employee);
+        }
+
+
     }
 }

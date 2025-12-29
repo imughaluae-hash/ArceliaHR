@@ -3,11 +3,18 @@ using ArceliaHR.Database.Repositories;
 using ArceliaHR.Models;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
+using System.IO;
+using System.Windows.Forms;
 
 namespace ArceliaHR
 {
     public partial class EmpForm : Form
     {
+        private int? _employeeId = null;
+        public EmpForm(int employeeId) : this()
+        {
+            _employeeId = employeeId;
+        }
         public EmpForm()
         {
             InitializeComponent();
@@ -56,8 +63,11 @@ namespace ArceliaHR
             if (open.ShowDialog() == DialogResult.OK)
             {
                 // display image in picture box
-
-                empPicture.Image = new Bitmap(open.FileName);
+                using (var img = Image.FromFile(open.FileName))
+                {
+                    empPicture.Image = new Bitmap(img);
+                }
+                //empPicture.Image = new Bitmap(open.FileName);
                 empPicture.SizeMode = PictureBoxSizeMode.StretchImage;
 
                 fileName = open.FileName.ToString();
@@ -148,23 +158,96 @@ namespace ArceliaHR
         private void btnSave_Click(object sender, EventArgs e)
         {
             var repo = new EmployeeRepository();
-            repo.Add(_employee);
-            MessageBox.Show("Employee saved");
+            _employee.Picture = ImageToBytes(empPicture.Image);
+
+            if (_employee.Id == 0)
+            {
+                repo.Add(_employee);
+                MessageBox.Show("Employee added");
+            }
+            else
+            {
+                repo.Update(_employee);
+                MessageBox.Show("Employee updated");
+            }
+
+            DialogResult = DialogResult.OK;
+            Close();
         }
 
         private void btnStatus_Click(object sender, EventArgs e)
         {
-            txtStatus.Text = txtStatus.Text == "Active" ? "DeActive" : "Active";
-        }
+            if (_employee == null) return;
 
+            _employee.Status = _employee.Status == "Active" ? "DeActive" : "Active";
+
+            txtStatus.Text = _employee.Status;
+        }
+        private byte[] ImageToBytes(Image img)
+        {
+            if (img == null) return null;
+
+            using (var ms = new MemoryStream())
+            {
+                using (var bmp = new Bitmap(img)) // 🔑 CLONE
+                {
+                    bmp.Save(ms, ImageFormat.Jpeg);
+                }
+                return ms.ToArray();
+            }
+        }
         private void EmpForm_Load(object sender, EventArgs e)
         {
-            _employee = new EmployeeModel { Status = "Active" };
+            if (_employeeId.HasValue)
+            {
+                LoadEmployee(_employeeId.Value);
+                btnSave.Text = "Update";
+            }
+            else
+            {
+                _employee = new EmployeeModel { Status = "Active" };
+                _bs.DataSource = _employee;
+                BindControls();
+            }
+
+        }
+        private void LoadEmployee(int employeeId)
+        {
+            var repo = new EmployeeRepository();
+            var emp = repo.GetById(employeeId);
+
+            if (emp == null)
+            {
+                MessageBox.Show("Employee not found.");
+                Close();
+                return;
+            }
+
+            _employee = emp;
             _bs.DataSource = _employee;
+
             BindControls();
+
+            LoadEmployeePicture();
+        }
+        private void LoadEmployeePicture()
+        {
+
+            if (_employee.Picture == null || _employee.Picture.Length == 0)
+                return;
+
+            using var ms = new MemoryStream(_employee.Picture);
+            empPicture.Image = Image.FromStream(ms);
+            empPicture.SizeMode = PictureBoxSizeMode.StretchImage;
         }
         private void BindControls()
         {
+            this.DataBindings.Clear();
+
+            foreach (Control c in Controls)
+            {
+                c.DataBindings.Clear();
+            }
             empId.DataBindings.Add("Text", _bs, "Id");
             empName.DataBindings.Add("Text", _bs, "Name");
             empFather.DataBindings.Add("Text", _bs, "FatherName");

@@ -41,9 +41,9 @@
             txtSearch = new ToolStripTextBox();
             cmbSearch = new ToolStripComboBox();
             toolStripSeparator2 = new ToolStripSeparator();
+            btnDatabseTest = new ToolStripButton();
             panelGrid = new Panel();
             dgList = new DataGridView();
-            btnDatabseTest = new ToolStripButton();
             tsMain.SuspendLayout();
             panelGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgList).BeginInit();
@@ -85,6 +85,7 @@
             btnEditEmp.Size = new Size(31, 35);
             btnEditEmp.Text = "Edit";
             btnEditEmp.TextImageRelation = TextImageRelation.ImageAboveText;
+            btnEditEmp.Click += btnEditEmp_Click;
             // 
             // btnDelEmp
             // 
@@ -142,6 +143,15 @@
             toolStripSeparator2.Name = "toolStripSeparator2";
             toolStripSeparator2.Size = new Size(6, 38);
             // 
+            // btnDatabseTest
+            // 
+            btnDatabseTest.Image = (Image)resources.GetObject("btnDatabseTest.Image");
+            btnDatabseTest.ImageTransparentColor = Color.Magenta;
+            btnDatabseTest.Name = "btnDatabseTest";
+            btnDatabseTest.Size = new Size(98, 35);
+            btnDatabseTest.Text = "DataBase Test";
+            btnDatabseTest.Click += btnDatabseTest_Click;
+            // 
             // panelGrid
             // 
             panelGrid.Controls.Add(dgList);
@@ -155,24 +165,18 @@
             // 
             dgList.AllowUserToAddRows = false;
             dgList.AllowUserToDeleteRows = false;
+            dgList.AllowUserToOrderColumns = true;
             dgList.AllowUserToResizeRows = false;
             dgList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgList.Dock = DockStyle.Fill;
             dgList.Location = new Point(0, 0);
+            dgList.MultiSelect = false;
             dgList.Name = "dgList";
             dgList.ReadOnly = true;
             dgList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgList.Size = new Size(800, 412);
             dgList.TabIndex = 0;
-            // 
-            // btnDatabseTest
-            // 
-            btnDatabseTest.Image = (Image)resources.GetObject("btnDatabseTest.Image");
-            btnDatabseTest.ImageTransparentColor = Color.Magenta;
-            btnDatabseTest.Name = "btnDatabseTest";
-            btnDatabseTest.Size = new Size(98, 35);
-            btnDatabseTest.Text = "DataBase Test";
-            btnDatabseTest.Click += btnDatabseTest_Click;
+            dgList.CellDoubleClick += dgList_CellDoubleClick;
             // 
             // MainForm
             // 
@@ -184,6 +188,7 @@
             Name = "MainForm";
             Text = "Arcelia HR";
             WindowState = FormWindowState.Maximized;
+            Load += MainForm_Load;
             tsMain.ResumeLayout(false);
             tsMain.PerformLayout();
             panelGrid.ResumeLayout(false);
