@@ -154,5 +154,23 @@ namespace ArceliaHR
 
             MessageBox.Show("Attendance saved successfully");
         }
+
+        private void dtDate_ValueChanged(object sender, EventArgs e)
+        {
+            var repo = new AttendanceRepository();
+            _list = repo.GetByDate(dtDate.Value);
+
+            dgvAttendance.DataSource = new BindingList<AttendanceModel>(_list);
+        }
+
+        private void btnPrevDay_Click(object sender, EventArgs e)
+        {
+            dtDate.Value = dtDate.Value.AddDays(-1);
+        }
+
+        private void btnNextDay_Click(object sender, EventArgs e)
+        {
+            dtDate.Value = dtDate.Value.AddDays(1);
+        }
     }
 }

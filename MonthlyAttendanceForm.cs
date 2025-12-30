@@ -69,7 +69,7 @@ namespace ArceliaHR
             {
                 dgvMonthlyAttendance.Columns.Add(new DataGridViewTextBoxColumn
                 {
-                    DataPropertyName = $"Days[{day}]",
+                    DataPropertyName = $"[{day}]",
                     HeaderText = day.ToString(),
                     Width = 30
                 });
@@ -96,29 +96,118 @@ namespace ArceliaHR
                     col.HeaderCell.Style.BackColor = Color.Yellow;
                 }
             }
+            // ---- SUMMARY COLUMNS ----
+            dgvMonthlyAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "TotalP",
+                HeaderText = "P",
+                Width = 40,
+                ReadOnly = true
+            });
+
+            dgvMonthlyAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "TotalA",
+                HeaderText = "A",
+                Width = 40,
+                ReadOnly = true
+            });
+
+            dgvMonthlyAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "TotalL",
+                HeaderText = "L",
+                Width = 40,
+                ReadOnly = true
+            });
+
+            dgvMonthlyAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "TotalH",
+                HeaderText = "H",
+                Width = 40,
+                ReadOnly = true
+            });
+
+            dgvMonthlyAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "TotalOT",
+                HeaderText = "OT",
+                Width = 60,
+                ReadOnly = true
+            });
+
+            dgvMonthlyAttendance.Columns["TotalP"].DefaultCellStyle.BackColor = Color.LightGreen;
+            dgvMonthlyAttendance.Columns["TotalA"].DefaultCellStyle.BackColor = Color.LightPink;
+            dgvMonthlyAttendance.Columns["TotalL"].DefaultCellStyle.BackColor = Color.LightYellow;
+            dgvMonthlyAttendance.Columns["TotalH"].DefaultCellStyle.BackColor = Color.LightBlue;
+            dgvMonthlyAttendance.Columns["TotalOT"].DefaultCellStyle.BackColor = Color.Gainsboro;
+
+            dgvMonthlyAttendance.Columns["TotalOT"].DefaultCellStyle.Format = "0.##";
 
             dgvMonthlyAttendance.CellFormatting += DgvMonthlyAttendance_CellFormatting;
         }
+        private void UpdateSummaryColumns()
+        {
+            int daysInMonth = DateTime.DaysInMonth(_year, _month);
 
-        private void DgvMonthlyAttendance_CellFormatting(object? sender, DataGridViewCellFormattingEventArgs e)
+            foreach (DataGridViewRow row in dgvMonthlyAttendance.Rows)
+            {
+                if (row.DataBoundItem is not MonthlyAttendanceModel model)
+                    continue;
+
+                int p = 0, a = 0, l = 0, h = 0;
+                int ot = 0;
+
+                for (int day = 1; day <= daysInMonth; day++)
+                {
+                    var status = model.Days[day];
+
+                    switch (status)
+                    {
+                        case "P": p++; break;
+                        case "A": a++; break;
+                        case "L": l++; break;
+                        case "H": h++; break;
+                    }
+
+                    ot += (int)model.Overtime[day];
+                }
+
+                row.Cells["TotalP"].Value = p;
+                row.Cells["TotalA"].Value = a;
+                row.Cells["TotalL"].Value = l;
+                row.Cells["TotalH"].Value = h;
+                row.Cells["TotalOT"].Value = ot;
+            }
+        }
+
+        private void DgvMonthlyAttendance_CellFormatting(
+            object? sender,
+            DataGridViewCellFormattingEventArgs e)
         {
             if (e.RowIndex < 0 || e.ColumnIndex == 0) return;
 
-            var row = dgvMonthlyAttendance.Rows[e.RowIndex].DataBoundItem as MonthlyAttendanceModel;
-            if (row == null) return;
+            var model = dgvMonthlyAttendance.Rows[e.RowIndex]
+                            .DataBoundItem as MonthlyAttendanceModel;
+            if (model == null) return;
 
-            int day = e.ColumnIndex; // assuming first column is employee name
-            e.Value = row.Days.ContainsKey(day) ? row.Days[day] : "";
+            // Day columns only (Employee is index 0)
+            int day = e.ColumnIndex;
 
-            if (e.ColumnIndex == 0) return;
+            if (!model.Days.ContainsKey(day)) return;
 
-            var status = e.Value?.ToString();
-            if (status == "P") e.CellStyle!.BackColor = Color.LightGreen;
-            else if (status == "A") e.CellStyle!.BackColor = Color.LightPink;
-            else if (status == "L") e.CellStyle!.BackColor = Color.LightYellow;
-            else if (status == "H") e.CellStyle!.BackColor = Color.LightBlue;
+            e.Value = model.Days[day];
 
+            switch (e.Value?.ToString())
+            {
+                case "P": e.CellStyle!.BackColor = Color.LightGreen; break;
+                case "A": e.CellStyle!.BackColor = Color.LightPink; break;
+                case "L": e.CellStyle!.BackColor = Color.LightYellow; break;
+                case "H": e.CellStyle!.BackColor = Color.LightBlue; break;
+            }
         }
+
 
         #endregion
 
@@ -129,6 +218,7 @@ namespace ArceliaHR
             var repo = new AttendanceRepository();
             _monthlyData = GetMonthlyData(_month, _year);
             dgvMonthlyAttendance.DataSource = _monthlyData;
+            UpdateSummaryColumns();
         }
 
         private List<MonthlyAttendanceModel> GetMonthlyData(int month, int year)
@@ -144,7 +234,7 @@ namespace ArceliaHR
                 var model = new MonthlyAttendanceModel
                 {
                     EmployeeId = (int)emp.Id!,
-                    EmployeeName = emp.Name
+                    EmployeeName = emp.Name!
                 };
 
                 for (int day = 1; day <= DateTime.DaysInMonth(year, month); day++)
