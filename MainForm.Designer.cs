@@ -113,6 +113,7 @@
             btnAttend.Size = new Size(72, 35);
             btnAttend.Text = "Attendance";
             btnAttend.TextImageRelation = TextImageRelation.ImageAboveText;
+            btnAttend.Click += btnAttend_Click;
             // 
             // btnPay
             // 
@@ -150,7 +151,7 @@
             btnDatabseTest.Name = "btnDatabseTest";
             btnDatabseTest.Size = new Size(98, 35);
             btnDatabseTest.Text = "DataBase Test";
-            //btnDatabseTest.Click += btnDatabseTest_Click;
+            btnDatabseTest.Click += btnDatabseTest_Click;
             // 
             // panelGrid
             // 

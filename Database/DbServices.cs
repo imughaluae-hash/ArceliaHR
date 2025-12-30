@@ -1,4 +1,5 @@
 ﻿using Dapper;
+using System;
 using System.Data;
 using System.Data.SQLite;
 
@@ -8,7 +9,7 @@ namespace ArceliaHR.Database
     {
         public static class DbContext
         {
-            private static string connString;
+            private static string? connString;
             private static bool initialized;
             public static IDbConnection Open()
             {
@@ -36,33 +37,47 @@ namespace ArceliaHR.Database
             {
                 conn.Execute(@"
                 CREATE TABLE IF NOT EXISTS Employees (
-                Id INTEGER PRIMARY KEY AUTOINCREMENT,
-                Name TEXT,
-                FatherName TEXT,
-                Religion TEXT,
-                MaritalStatus TEXT,
-                Gender TEXT,
-                DateOfBirth TEXT,
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    Name TEXT,
+                    FatherName TEXT,
+                    Religion TEXT,
+                    MaritalStatus TEXT,
+                    Gender TEXT,
+                    DateOfBirth TEXT,
 
-                Mobile TEXT,
-                ICEContact TEXT,
-                Nationality TEXT,
-                Relation TEXT,
+                    Mobile TEXT,
+                    ICEContact TEXT,
+                    Nationality TEXT,
+                    Relation TEXT,
 
-                PassportNumber TEXT,
-                PassportIssueDate TEXT,
-                PassportExpiryDate TEXT,
+                    PassportNumber TEXT,
+                    PassportIssueDate TEXT,
+                    PassportExpiryDate TEXT,
 
-                IDNumber TEXT,
-                IDCardNumber TEXT,
-                IDExpiryDate TEXT,
+                    IDNumber TEXT,
+                    IDCardNumber TEXT,
+                    IDExpiryDate TEXT,
 
-                Work TEXT,
-                Department TEXT,
+                    Work TEXT,
+                    Department TEXT,
 
-                Picture BLOB,
-                Status TEXT
+                    Picture BLOB,
+                    Status TEXT
                  );");
+                conn.Execute(@"
+                CREATE TABLE IF NOT EXISTS Attendance (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    EmployeeId INTEGER NOT NULL,
+                    AttDate DATE NOT NULL,
+                    Status TEXT NOT NULL DEFAULT 'P',
+                    OvertimeHours REAL NOT NULL DEFAULT 0,
+                    Remarks TEXT,
+                    UNIQUE(EmployeeId, AttDate)
+                );");
+                conn.Execute(@"CREATE UNIQUE INDEX IF NOT EXISTS
+                    IX_Attendance_Unique
+                    ON Attendance(EmployeeId, AttDate
+                );");
             }
         }
     }

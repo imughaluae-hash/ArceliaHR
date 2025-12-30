@@ -1,0 +1,158 @@
+﻿using ArceliaHR.Database.Repositories;
+using ArceliaHR.Models;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+
+namespace ArceliaHR
+{
+    public partial class Attendance : Form
+    {
+        private List<AttendanceModel> _list = new();
+        public Attendance()
+        {
+            InitializeComponent();
+        }
+
+        private void Attendance_Load(object sender, EventArgs e)
+        {
+            dgvAttendance.CurrentCellDirtyStateChanged += (s, e) =>
+            {
+                if (dgvAttendance.IsCurrentCellDirty)
+                    dgvAttendance.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            };
+            dgvAttendance.EditingControlShowing += dgvAttendance_EditingControlShowing;
+            GridFormating();
+        }
+        private void dgvAttendance_EditingControlShowing(
+    object? sender,
+    DataGridViewEditingControlShowingEventArgs e)
+        {
+            if (dgvAttendance.CurrentCell.OwningColumn.Name == "OvertimeHours")
+            {
+                if (e.Control is TextBox tb)
+                {
+                    tb.KeyPress -= Overtime_KeyPress;
+                    tb.KeyPress += Overtime_KeyPress;
+                }
+            }
+        }
+
+        private void Overtime_KeyPress(object? sender, KeyPressEventArgs e)
+        {
+            // allow digits, backspace, and dot
+            if (!char.IsControl(e.KeyChar) &&
+                !char.IsDigit(e.KeyChar) &&
+                e.KeyChar != '.')
+            {
+                e.Handled = true;
+            }
+
+            // allow only ONE dot
+            if (e.KeyChar == '.' &&
+                sender is TextBox tb &&
+                tb.Text.Contains('.'))
+            {
+                e.Handled = true;
+            }
+        }
+
+        public void GridFormating()
+        {
+            dgvAttendance.AutoGenerateColumns = false;
+            dgvAttendance.Columns.Clear();
+
+            dgvAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "EmployeeId",
+                DataPropertyName = "EmployeeId",
+                HeaderText = "ID",
+                ReadOnly = true
+            });
+
+            dgvAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "EmployeeName",
+                DataPropertyName = "EmployeeName",
+                HeaderText = "Name",
+                ReadOnly = true,
+                Width = 180
+            });
+
+            dgvAttendance.Columns.Add(new DataGridViewComboBoxColumn
+            {
+                Name = "Status",
+                DataPropertyName = "Status",
+                HeaderText = "Att",
+                DataSource = new[] { "P", "A", "L", "H" },
+                Width = 60
+            });
+
+            dgvAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "OvertimeHours",
+                DataPropertyName = "OvertimeHours",
+                HeaderText = "OT (hrs)",
+                Width = 80
+            });
+
+            dgvAttendance.Columns.Add(new DataGridViewTextBoxColumn
+            {
+                Name = "Remarks",
+                DataPropertyName = "Remarks",
+                HeaderText = "Remarks",
+                Width = 150
+            });
+        }
+
+
+        private void dgvAttendance_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            dgvAttendance.CellValueChanged -= dgvAttendance_CellValueChanged!; // unsubscribe
+
+            var row = dgvAttendance.Rows[e.RowIndex];
+            var status = row.Cells["Status"].Value?.ToString();
+
+            if (status != "P")
+            {
+                row.Cells["OvertimeHours"].Value = 0;
+                row.Cells["OvertimeHours"].ReadOnly = true;
+                row.DefaultCellStyle.BackColor = Color.LightPink;
+            }
+            else
+            {
+                row.Cells["OvertimeHours"].ReadOnly = false;
+                row.DefaultCellStyle.BackColor = Color.LightGreen;
+            }
+
+            dgvAttendance.CellValueChanged += dgvAttendance_CellValueChanged!; // re-subscribe
+        }
+
+
+        private void btnLoad_Click(object sender, EventArgs e)
+        {
+            var repo = new AttendanceRepository();
+            _list = repo.GetByDate(dtDate.Value);
+
+            dgvAttendance.DataSource = new BindingList<AttendanceModel>(_list);
+        }
+
+        private void btnSave_Click(object sender, EventArgs e)
+        {
+            dgvAttendance.EndEdit();
+
+            var repo = new AttendanceRepository();
+            repo.Save(_list);
+
+            MessageBox.Show("Attendance saved successfully");
+        }
+    }
+}

@@ -190,5 +190,17 @@ namespace ArceliaHR
         {
             btnEditEmp.Enabled = dgList.Rows.Count > 0;
         }
+
+        private void btnAttend_Click(object sender, EventArgs e)
+        {
+            var aForm = new MonthlyAttendanceForm();
+            aForm.ShowDialog();
+        }
+
+        private void btnDatabseTest_Click(object sender, EventArgs e)
+        {
+
+            
+        }
     }
 }
