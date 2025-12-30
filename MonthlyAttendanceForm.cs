@@ -22,6 +22,7 @@ namespace ArceliaHR
 
         private void MonthlyAttendanceForm_Load(object sender, EventArgs e)
         {
+            dgvMonthlyAttendance.EnableHeadersVisualStyles = false;
             dtMonth.Value = new DateTime(_year, _month, 1);
             SetupMonthlyGrid(_month, _year);
             LoadMonthlyData();
@@ -43,6 +44,16 @@ namespace ArceliaHR
             dgvMonthlyAttendance.AutoGenerateColumns = false;
             dgvMonthlyAttendance.Columns.Clear();
 
+            dgvMonthlyAttendance.ReadOnly = true;
+            dgvMonthlyAttendance.AllowUserToAddRows = false;
+            dgvMonthlyAttendance.AllowUserToDeleteRows = false;
+            dgvMonthlyAttendance.SelectionMode = DataGridViewSelectionMode.CellSelect;
+            dgvMonthlyAttendance.MultiSelect = false;
+
+            foreach (DataGridViewColumn col in dgvMonthlyAttendance.Columns)
+            {
+                col.SortMode = DataGridViewColumnSortMode.NotSortable;
+            }
             // Employee Name first
             dgvMonthlyAttendance.Columns.Add(new DataGridViewTextBoxColumn
             {
@@ -62,6 +73,28 @@ namespace ArceliaHR
                     HeaderText = day.ToString(),
                     Width = 30
                 });
+            }
+            // new formatting 
+            dgvMonthlyAttendance.Columns[0].Frozen = true;
+            for (int i = 1; i < dgvMonthlyAttendance.Columns.Count; i++)
+            {
+                dgvMonthlyAttendance.Columns[i].DefaultCellStyle.Alignment =
+                    DataGridViewContentAlignment.MiddleCenter;
+            }
+            dgvMonthlyAttendance.RowHeadersVisible = false;
+            dgvMonthlyAttendance.AutoSizeRowsMode = DataGridViewAutoSizeRowsMode.None;
+            dgvMonthlyAttendance.RowTemplate.Height = 24;
+            dgvMonthlyAttendance.ColumnHeadersDefaultCellStyle.Font =
+    new Font("Calibri", 9, FontStyle.Bold);
+            for (int day = 1; day <= daysInMonth; day++)
+            {
+                var date = new DateTime(year, month, day);
+                var col = dgvMonthlyAttendance.Columns[day];
+
+                if (date.DayOfWeek == DayOfWeek.Friday)
+                {
+                    col.HeaderCell.Style.BackColor = Color.Yellow;
+                }
             }
 
             dgvMonthlyAttendance.CellFormatting += DgvMonthlyAttendance_CellFormatting;
@@ -84,6 +117,7 @@ namespace ArceliaHR
             else if (status == "A") e.CellStyle!.BackColor = Color.LightPink;
             else if (status == "L") e.CellStyle!.BackColor = Color.LightYellow;
             else if (status == "H") e.CellStyle!.BackColor = Color.LightBlue;
+
         }
 
         #endregion
@@ -129,44 +163,22 @@ namespace ArceliaHR
 
         #endregion
 
-        #region Save Data
-
-        private void btnSave_Click(object sender, EventArgs e)
-        {
-            dgvMonthlyAttendance.EndEdit();
-
-            var repo = new AttendanceRepository();
-
-            // Flatten MonthlyAttendanceModel -> AttendanceModel for saving
-            var saveList = new List<AttendanceModel>();
-
-            foreach (var row in _monthlyData)
-            {
-                foreach (var day in row.Days.Keys)
-                {
-                    saveList.Add(new AttendanceModel
-                    {
-
-                        EmployeeId = row.EmployeeId,
-                        EmployeeName = row.EmployeeName!,
-                        AttDate = new DateTime(_year, _month, day),
-                        Status = row.Days[day],
-                        OvertimeHours = row.Overtime[day]
-                    });
-                }
-            }
-
-            repo.Save(saveList);
-
-            MessageBox.Show("Monthly attendance saved successfully!");
-        }
-
-        #endregion
 
         private void btnAddAttendance_Click(object sender, EventArgs e)
         {
             var attend = new Attendance();
             attend.ShowDialog();
+            LoadMonthlyData();
+        }
+
+        private void btnPrevMonth_Click(object sender, EventArgs e)
+        {
+            dtMonth.Value = dtMonth.Value.AddMonths(-1);
+        }
+
+        private void btnNextMonth_Click(object sender, EventArgs e)
+        {
+            dtMonth.Value = dtMonth.Value.AddMonths(1);
         }
     }
 
