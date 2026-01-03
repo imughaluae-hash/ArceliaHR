@@ -1,10 +1,5 @@
 ﻿using ArceliaHR.Database.Repositories;
 using ArceliaHR.Models;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ArceliaHR
 {

@@ -1,12 +1,6 @@
 ﻿using ArceliaHR.Database;
 using ArceliaHR.Database.Repositories;
 using ArceliaHR.Models;
-using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 using Dapper;
 
 namespace ArceliaHR
@@ -105,7 +99,7 @@ namespace ArceliaHR
                         var img = Image.FromStream(ms);
                         return img.GetThumbnailImage(128, 128, null, IntPtr.Zero);
                     }
-                        case ".pdf":
+                case ".pdf":
                     return Properties.Resources.pdf_icon;
                 case ".doc":
                 case ".docx":

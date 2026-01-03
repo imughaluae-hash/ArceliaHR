@@ -2,12 +2,6 @@
 using ArceliaHR.Database.Repositories;
 using ArceliaHR.Models;
 using Dapper;
-using System;
-using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Linq;
-using System.Windows.Forms;
 
 namespace ArceliaHR
 {
