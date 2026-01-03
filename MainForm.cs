@@ -199,8 +199,9 @@ namespace ArceliaHR
 
         private void btnDatabseTest_Click(object sender, EventArgs e)
         {
+            var FilesForm = new Files();
+            FilesForm.ShowDialog();
 
-            
         }
     }
 }

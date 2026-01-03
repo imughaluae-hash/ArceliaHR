@@ -78,6 +78,18 @@ namespace ArceliaHR.Database
                     IX_Attendance_Unique
                     ON Attendance(EmployeeId, AttDate
                 );");
+                conn.Execute(@"
+                CREATE TABLE IF NOT EXISTS Files (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    EmployeeId INTEGER NOT NULL,
+                    FileName TEXT NOT NULL,
+                    Extension TEXT NOT NULL,
+                    MimeType TEXT,
+                    FileSize INTEGER,
+                    Data BLOB NOT NULL,
+                    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+                    FOREIGN KEY(EmployeeId) REFERENCES Employees(Id)
+                );");
             }
         }
     }
