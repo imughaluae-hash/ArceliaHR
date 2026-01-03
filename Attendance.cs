@@ -121,17 +121,26 @@ namespace ArceliaHR
             var row = dgvAttendance.Rows[e.RowIndex];
             var status = row.Cells["Status"].Value?.ToString();
 
-            if (status != "P")
+            // Only change row color
+            if (status == "P")
             {
-                row.Cells["OvertimeHours"].Value = 0;
-                row.Cells["OvertimeHours"].ReadOnly = true;
-                row.DefaultCellStyle.BackColor = Color.LightPink;
-            }
-            else
-            {
-                row.Cells["OvertimeHours"].ReadOnly = false;
                 row.DefaultCellStyle.BackColor = Color.LightGreen;
             }
+            else if (status == "A")
+            {
+                row.DefaultCellStyle.BackColor = Color.LightPink;
+            }
+            else if (status == "L")
+            {
+                row.DefaultCellStyle.BackColor = Color.LightYellow;
+            }
+            else if (status == "H")
+            {
+                row.DefaultCellStyle.BackColor = Color.LightBlue;
+            }
+
+            // OT is always editable
+            row.Cells["OvertimeHours"].ReadOnly = false;
 
             dgvAttendance.CellValueChanged += dgvAttendance_CellValueChanged!; // re-subscribe
         }
