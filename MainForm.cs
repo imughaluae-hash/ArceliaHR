@@ -197,11 +197,10 @@ namespace ArceliaHR
             aForm.ShowDialog();
         }
 
-        private void btnDatabseTest_Click(object sender, EventArgs e)
+        private void btnFiles_Click(object sender, EventArgs e)
         {
             var FilesForm = new Files();
             FilesForm.ShowDialog();
-
         }
     }
 }

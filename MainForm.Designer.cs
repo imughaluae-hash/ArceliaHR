@@ -41,7 +41,7 @@
             txtSearch = new ToolStripTextBox();
             cmbSearch = new ToolStripComboBox();
             toolStripSeparator2 = new ToolStripSeparator();
-            btnDatabseTest = new ToolStripButton();
+            btnTest = new ToolStripButton();
             panelGrid = new Panel();
             dgList = new DataGridView();
             tsMain.SuspendLayout();
@@ -51,7 +51,7 @@
             // 
             // tsMain
             // 
-            tsMain.Items.AddRange(new ToolStripItem[] { btnAddEmp, btnViewEmp, btnEditEmp, btnDelEmp, btnFiles, btnAttend, btnPay, toolStripSeparator1, txtSearch, cmbSearch, toolStripSeparator2, btnDatabseTest });
+            tsMain.Items.AddRange(new ToolStripItem[] { btnAddEmp, btnViewEmp, btnEditEmp, btnDelEmp, btnFiles, btnAttend, btnPay, toolStripSeparator1, txtSearch, cmbSearch, toolStripSeparator2, btnTest });
             tsMain.Location = new Point(0, 0);
             tsMain.Name = "tsMain";
             tsMain.Size = new Size(800, 38);
@@ -104,6 +104,7 @@
             btnFiles.Size = new Size(34, 35);
             btnFiles.Text = "Files";
             btnFiles.TextImageRelation = TextImageRelation.ImageAboveText;
+            btnFiles.Click += btnFiles_Click;
             // 
             // btnAttend
             // 
@@ -144,14 +145,13 @@
             toolStripSeparator2.Name = "toolStripSeparator2";
             toolStripSeparator2.Size = new Size(6, 38);
             // 
-            // btnDatabseTest
+            // btnTest
             // 
-            btnDatabseTest.Image = (Image)resources.GetObject("btnDatabseTest.Image");
-            btnDatabseTest.ImageTransparentColor = Color.Magenta;
-            btnDatabseTest.Name = "btnDatabseTest";
-            btnDatabseTest.Size = new Size(98, 35);
-            btnDatabseTest.Text = "DataBase Test";
-            btnDatabseTest.Click += btnDatabseTest_Click;
+            btnTest.Image = (Image)resources.GetObject("btnTest.Image");
+            btnTest.ImageTransparentColor = Color.Magenta;
+            btnTest.Name = "btnTest";
+            btnTest.Size = new Size(47, 35);
+            btnTest.Text = "Test";
             // 
             // panelGrid
             // 
@@ -214,6 +214,6 @@
         private ToolStripComboBox cmbSearch;
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton btnPay;
-        private ToolStripButton btnDatabseTest;
+        private ToolStripButton btnTest;
     }
 }
