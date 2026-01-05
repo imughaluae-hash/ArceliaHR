@@ -44,6 +44,7 @@
             btnTest = new ToolStripButton();
             panelGrid = new Panel();
             dgList = new DataGridView();
+            toolStripButton1 = new ToolStripButton();
             tsMain.SuspendLayout();
             panelGrid.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgList).BeginInit();
@@ -51,7 +52,7 @@
             // 
             // tsMain
             // 
-            tsMain.Items.AddRange(new ToolStripItem[] { btnAddEmp, btnViewEmp, btnEditEmp, btnDelEmp, btnFiles, btnAttend, btnPay, toolStripSeparator1, txtSearch, cmbSearch, toolStripSeparator2, btnTest });
+            tsMain.Items.AddRange(new ToolStripItem[] { btnAddEmp, btnViewEmp, btnEditEmp, btnDelEmp, btnFiles, btnAttend, btnPay, toolStripSeparator1, txtSearch, cmbSearch, toolStripSeparator2, btnTest, toolStripButton1 });
             tsMain.Location = new Point(0, 0);
             tsMain.Name = "tsMain";
             tsMain.Size = new Size(800, 38);
@@ -124,6 +125,7 @@
             btnPay.Size = new Size(63, 35);
             btnPay.Text = "Payments";
             btnPay.TextImageRelation = TextImageRelation.ImageAboveText;
+            btnPay.Click += btnPay_Click;
             // 
             // toolStripSeparator1
             // 
@@ -152,6 +154,7 @@
             btnTest.Name = "btnTest";
             btnTest.Size = new Size(47, 35);
             btnTest.Text = "Test";
+            btnTest.Click += btnTest_Click;
             // 
             // panelGrid
             // 
@@ -178,6 +181,16 @@
             dgList.Size = new Size(800, 412);
             dgList.TabIndex = 0;
             dgList.CellDoubleClick += dgList_CellDoubleClick;
+            // 
+            // toolStripButton1
+            // 
+            toolStripButton1.DisplayStyle = ToolStripItemDisplayStyle.Image;
+            toolStripButton1.Image = (Image)resources.GetObject("toolStripButton1.Image");
+            toolStripButton1.ImageTransparentColor = Color.Magenta;
+            toolStripButton1.Name = "toolStripButton1";
+            toolStripButton1.Size = new Size(23, 35);
+            toolStripButton1.Text = "toolStripButton1";
+            toolStripButton1.Click += toolStripButton1_Click;
             // 
             // MainForm
             // 
@@ -215,5 +228,6 @@
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton btnPay;
         private ToolStripButton btnTest;
+        private ToolStripButton toolStripButton1;
     }
 }

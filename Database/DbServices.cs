@@ -89,6 +89,28 @@ namespace ArceliaHR.Database
                     CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY(EmployeeId) REFERENCES Employees(Id)
                 );");
+                conn.Execute(@"CREATE TABLE IF NOT EXISTS EmployeeLedger (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+
+                    EmployeeId INTEGER NOT NULL,
+
+                    TranDate DATE NOT NULL,
+
+                    TranType TEXT NOT NULL,
+                    -- SALARY | ADVANCE | FINE | ADJUSTMENT | RECOVERY
+
+                    Description TEXT,
+
+                    Debit REAL NOT NULL DEFAULT 0,
+                    Credit REAL NOT NULL DEFAULT 0,
+
+                    ReferenceMonth TEXT,
+                    -- e.g. '2026-01' (used for salary)
+
+                    CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+                    FOREIGN KEY(EmployeeId) REFERENCES Employees(Id)
+                );");
             }
         }
     }

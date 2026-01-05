@@ -202,5 +202,23 @@ namespace ArceliaHR
             var FilesForm = new Files();
             FilesForm.ShowDialog();
         }
+
+        private void btnPay_Click(object sender, EventArgs e)
+        {
+            var PaymentCen = new PaymentCenter();
+            PaymentCen.ShowDialog();
+        }
+
+        private void btnTest_Click(object sender, EventArgs e)
+        {
+            var StatementForm = new EmployeeStatementForm();
+            StatementForm.ShowDialog();
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            var AdvanceForm = new AdvanceFineForm();
+            AdvanceForm.ShowDialog();
+        }
     }
 }
