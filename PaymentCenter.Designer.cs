@@ -62,6 +62,7 @@
             btnAdvFine.Name = "btnAdvFine";
             btnAdvFine.Size = new Size(23, 22);
             btnAdvFine.Text = "Adv / FIne";
+            btnAdvFine.Click += btnAdvFine_Click;
             // 
             // btnSalary
             // 
@@ -72,6 +73,7 @@
             btnSalary.Name = "btnSalary";
             btnSalary.Size = new Size(23, 22);
             btnSalary.Text = "Salary";
+            btnSalary.Click += btnSalary_Click;
             // 
             // splitContainer1
             // 
@@ -106,6 +108,8 @@
             dgActive.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgActive.Size = new Size(800, 225);
             dgActive.TabIndex = 0;
+            dgActive.CellDoubleClick += dgActive_CellDoubleClick;
+            dgActive.SelectionChanged += dgActive_SelectionChanged;
             // 
             // dgInactive
             // 
@@ -122,6 +126,8 @@
             dgInactive.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgInactive.Size = new Size(800, 196);
             dgInactive.TabIndex = 0;
+            dgInactive.CellDoubleClick += dgInactive_CellDoubleClick;
+            dgInactive.SelectionChanged += dgInactive_SelectionChanged;
             // 
             // PaymentCenter
             // 

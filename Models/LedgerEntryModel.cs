@@ -15,4 +15,13 @@
 
             public string? ReferenceMonth { get; set; }
         }
+    public class EmployeeGridModel
+    {
+        public int Id { get; set; }
+        public string Name { get; set; } = "";
+        public decimal BasicSalary { get; set; }
+        public decimal DueAdvances { get; set; }
+        public decimal DueFines { get; set; }
+        public decimal Balance => BasicSalary - DueAdvances - DueFines;
     }
+}

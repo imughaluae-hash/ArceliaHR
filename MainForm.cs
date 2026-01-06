@@ -217,8 +217,9 @@ namespace ArceliaHR
 
         private void toolStripButton1_Click(object sender, EventArgs e)
         {
-            var AdvanceForm = new AdvanceFineForm();
-            AdvanceForm.ShowDialog();
+            var form = new AdvanceFineForm();
+            form.SetEmployee(1, "Imran Ali");
+            form.ShowDialog();
         }
     }
 }

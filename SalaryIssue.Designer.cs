@@ -32,34 +32,34 @@
             lblAdvanceDue = new Label();
             lblSalaryDue = new Label();
             label3 = new Label();
+            lblBasic = new Label();
             lblEmployee = new Label();
+            label10 = new Label();
             label2 = new Label();
             label1 = new Label();
             groupBox2 = new GroupBox();
+            lblTotalPayable = new Label();
+            txtRemarks = new TextBox();
+            label11 = new Label();
+            udFine = new NumericUpDown();
+            udAdvance = new NumericUpDown();
+            udOvertime = new NumericUpDown();
+            udBasic = new NumericUpDown();
+            lable9 = new Label();
+            label8 = new Label();
+            label7 = new Label();
+            label6 = new Label();
+            label5 = new Label();
+            cmbMonth = new ComboBox();
+            label4 = new Label();
             btnIssue = new Button();
             btnCancel = new Button();
-            label4 = new Label();
-            cmbMonth = new ComboBox();
-            udBasic = new NumericUpDown();
-            label5 = new Label();
-            label6 = new Label();
-            label7 = new Label();
-            label8 = new Label();
-            lable9 = new Label();
-            udOvertime = new NumericUpDown();
-            udAdvance = new NumericUpDown();
-            udFine = new NumericUpDown();
-            txtRemarks = new TextBox();
-            label10 = new Label();
-            lblBasic = new Label();
-            label11 = new Label();
-            lblTotalPayable = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)udBasic).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)udOvertime).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)udAdvance).BeginInit();
             ((System.ComponentModel.ISupportInitialize)udFine).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)udAdvance).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)udOvertime).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)udBasic).BeginInit();
             SuspendLayout();
             // 
             // groupBox1
@@ -106,6 +106,15 @@
             label3.TabIndex = 0;
             label3.Text = "Advance Due";
             // 
+            // lblBasic
+            // 
+            lblBasic.AutoSize = true;
+            lblBasic.Location = new Point(317, 72);
+            lblBasic.Name = "lblBasic";
+            lblBasic.Size = new Size(59, 15);
+            lblBasic.TabIndex = 0;
+            lblBasic.Text = "Employee";
+            // 
             // lblEmployee
             // 
             lblEmployee.AutoSize = true;
@@ -114,6 +123,15 @@
             lblEmployee.Size = new Size(59, 15);
             lblEmployee.TabIndex = 0;
             lblEmployee.Text = "Employee";
+            // 
+            // label10
+            // 
+            label10.AutoSize = true;
+            label10.Location = new Point(243, 72);
+            label10.Name = "label10";
+            label10.Size = new Size(68, 15);
+            label10.TabIndex = 0;
+            label10.Text = "Basic Salary";
             // 
             // label2
             // 
@@ -156,119 +174,31 @@
             groupBox2.TabStop = false;
             groupBox2.Text = "Salary";
             // 
-            // btnIssue
+            // lblTotalPayable
             // 
-            btnIssue.Location = new Point(12, 417);
-            btnIssue.Name = "btnIssue";
-            btnIssue.Size = new Size(99, 30);
-            btnIssue.TabIndex = 1;
-            btnIssue.Text = "Issue";
-            btnIssue.UseVisualStyleBackColor = true;
+            lblTotalPayable.AutoSize = true;
+            lblTotalPayable.Location = new Point(112, 262);
+            lblTotalPayable.Name = "lblTotalPayable";
+            lblTotalPayable.Size = new Size(76, 15);
+            lblTotalPayable.TabIndex = 0;
+            lblTotalPayable.Text = "Total Payable";
             // 
-            // btnCancel
+            // txtRemarks
             // 
-            btnCancel.Location = new Point(117, 417);
-            btnCancel.Name = "btnCancel";
-            btnCancel.Size = new Size(99, 30);
-            btnCancel.TabIndex = 1;
-            btnCancel.Text = "Cancel";
-            btnCancel.UseVisualStyleBackColor = true;
-            btnCancel.Click += btnCancel_Click;
+            txtRemarks.Location = new Point(105, 173);
+            txtRemarks.Multiline = true;
+            txtRemarks.Name = "txtRemarks";
+            txtRemarks.Size = new Size(271, 67);
+            txtRemarks.TabIndex = 4;
             // 
-            // label4
+            // label11
             // 
-            label4.AutoSize = true;
-            label4.Location = new Point(25, 28);
-            label4.Name = "label4";
-            label4.Size = new Size(43, 15);
-            label4.TabIndex = 0;
-            label4.Text = "Month";
-            // 
-            // cmbMonth
-            // 
-            cmbMonth.FormattingEnabled = true;
-            cmbMonth.Location = new Point(105, 25);
-            cmbMonth.Name = "cmbMonth";
-            cmbMonth.Size = new Size(121, 23);
-            cmbMonth.TabIndex = 2;
-            // 
-            // udBasic
-            // 
-            udBasic.DecimalPlaces = 2;
-            udBasic.Location = new Point(105, 55);
-            udBasic.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
-            udBasic.Name = "udBasic";
-            udBasic.Size = new Size(121, 23);
-            udBasic.TabIndex = 3;
-            udBasic.TextAlign = HorizontalAlignment.Right;
-            udBasic.ThousandsSeparator = true;
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(25, 57);
-            label5.Name = "label5";
-            label5.Size = new Size(34, 15);
-            label5.TabIndex = 0;
-            label5.Text = "Basic";
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(25, 86);
-            label6.Name = "label6";
-            label6.Size = new Size(61, 15);
-            label6.TabIndex = 0;
-            label6.Text = "Over Time";
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(25, 115);
-            label7.Name = "label7";
-            label7.Size = new Size(53, 15);
-            label7.TabIndex = 0;
-            label7.Text = "Advance";
-            // 
-            // label8
-            // 
-            label8.AutoSize = true;
-            label8.Location = new Point(25, 144);
-            label8.Name = "label8";
-            label8.Size = new Size(29, 15);
-            label8.TabIndex = 0;
-            label8.Text = "Fine";
-            // 
-            // lable9
-            // 
-            lable9.AutoSize = true;
-            lable9.Location = new Point(25, 173);
-            lable9.Name = "lable9";
-            lable9.Size = new Size(52, 15);
-            lable9.TabIndex = 0;
-            lable9.Text = "Remarks";
-            // 
-            // udOvertime
-            // 
-            udOvertime.DecimalPlaces = 2;
-            udOvertime.Location = new Point(105, 84);
-            udOvertime.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
-            udOvertime.Name = "udOvertime";
-            udOvertime.Size = new Size(121, 23);
-            udOvertime.TabIndex = 3;
-            udOvertime.TextAlign = HorizontalAlignment.Right;
-            udOvertime.ThousandsSeparator = true;
-            // 
-            // udAdvance
-            // 
-            udAdvance.DecimalPlaces = 2;
-            udAdvance.Location = new Point(105, 113);
-            udAdvance.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
-            udAdvance.Name = "udAdvance";
-            udAdvance.Size = new Size(121, 23);
-            udAdvance.TabIndex = 3;
-            udAdvance.TextAlign = HorizontalAlignment.Right;
-            udAdvance.ThousandsSeparator = true;
+            label11.AutoSize = true;
+            label11.Location = new Point(7, 262);
+            label11.Name = "label11";
+            label11.Size = new Size(76, 15);
+            label11.TabIndex = 0;
+            label11.Text = "Total Payable";
             // 
             // udFine
             // 
@@ -281,49 +211,120 @@
             udFine.TextAlign = HorizontalAlignment.Right;
             udFine.ThousandsSeparator = true;
             // 
-            // txtRemarks
+            // udAdvance
             // 
-            txtRemarks.Location = new Point(105, 173);
-            txtRemarks.Multiline = true;
-            txtRemarks.Name = "txtRemarks";
-            txtRemarks.Size = new Size(271, 67);
-            txtRemarks.TabIndex = 4;
+            udAdvance.DecimalPlaces = 2;
+            udAdvance.Location = new Point(105, 113);
+            udAdvance.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            udAdvance.Name = "udAdvance";
+            udAdvance.Size = new Size(121, 23);
+            udAdvance.TabIndex = 3;
+            udAdvance.TextAlign = HorizontalAlignment.Right;
+            udAdvance.ThousandsSeparator = true;
             // 
-            // label10
+            // udOvertime
             // 
-            label10.AutoSize = true;
-            label10.Location = new Point(243, 72);
-            label10.Name = "label10";
-            label10.Size = new Size(68, 15);
-            label10.TabIndex = 0;
-            label10.Text = "Basic Salary";
+            udOvertime.DecimalPlaces = 2;
+            udOvertime.Location = new Point(105, 84);
+            udOvertime.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            udOvertime.Name = "udOvertime";
+            udOvertime.Size = new Size(121, 23);
+            udOvertime.TabIndex = 3;
+            udOvertime.TextAlign = HorizontalAlignment.Right;
+            udOvertime.ThousandsSeparator = true;
             // 
-            // lblBasic
+            // udBasic
             // 
-            lblBasic.AutoSize = true;
-            lblBasic.Location = new Point(317, 72);
-            lblBasic.Name = "lblBasic";
-            lblBasic.Size = new Size(59, 15);
-            lblBasic.TabIndex = 0;
-            lblBasic.Text = "Employee";
+            udBasic.DecimalPlaces = 2;
+            udBasic.Location = new Point(105, 55);
+            udBasic.Maximum = new decimal(new int[] { 100000, 0, 0, 0 });
+            udBasic.Name = "udBasic";
+            udBasic.Size = new Size(121, 23);
+            udBasic.TabIndex = 3;
+            udBasic.TextAlign = HorizontalAlignment.Right;
+            udBasic.ThousandsSeparator = true;
             // 
-            // label11
+            // lable9
             // 
-            label11.AutoSize = true;
-            label11.Location = new Point(7, 262);
-            label11.Name = "label11";
-            label11.Size = new Size(76, 15);
-            label11.TabIndex = 0;
-            label11.Text = "Total Payable";
+            lable9.AutoSize = true;
+            lable9.Location = new Point(25, 173);
+            lable9.Name = "lable9";
+            lable9.Size = new Size(52, 15);
+            lable9.TabIndex = 0;
+            lable9.Text = "Remarks";
             // 
-            // lblTotalPayable
+            // label8
             // 
-            lblTotalPayable.AutoSize = true;
-            lblTotalPayable.Location = new Point(112, 262);
-            lblTotalPayable.Name = "lblTotalPayable";
-            lblTotalPayable.Size = new Size(76, 15);
-            lblTotalPayable.TabIndex = 0;
-            lblTotalPayable.Text = "Total Payable";
+            label8.AutoSize = true;
+            label8.Location = new Point(25, 144);
+            label8.Name = "label8";
+            label8.Size = new Size(29, 15);
+            label8.TabIndex = 0;
+            label8.Text = "Fine";
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(25, 115);
+            label7.Name = "label7";
+            label7.Size = new Size(53, 15);
+            label7.TabIndex = 0;
+            label7.Text = "Advance";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(25, 86);
+            label6.Name = "label6";
+            label6.Size = new Size(61, 15);
+            label6.TabIndex = 0;
+            label6.Text = "Over Time";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(25, 57);
+            label5.Name = "label5";
+            label5.Size = new Size(34, 15);
+            label5.TabIndex = 0;
+            label5.Text = "Basic";
+            // 
+            // cmbMonth
+            // 
+            cmbMonth.FormattingEnabled = true;
+            cmbMonth.Location = new Point(105, 25);
+            cmbMonth.Name = "cmbMonth";
+            cmbMonth.Size = new Size(121, 23);
+            cmbMonth.TabIndex = 2;
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(25, 28);
+            label4.Name = "label4";
+            label4.Size = new Size(43, 15);
+            label4.TabIndex = 0;
+            label4.Text = "Month";
+            // 
+            // btnIssue
+            // 
+            btnIssue.Location = new Point(12, 417);
+            btnIssue.Name = "btnIssue";
+            btnIssue.Size = new Size(99, 30);
+            btnIssue.TabIndex = 1;
+            btnIssue.Text = "Issue";
+            btnIssue.UseVisualStyleBackColor = true;
+            btnIssue.Click += BtnIssue_Click;
+            // 
+            // btnCancel
+            // 
+            btnCancel.Location = new Point(117, 417);
+            btnCancel.Name = "btnCancel";
+            btnCancel.Size = new Size(99, 30);
+            btnCancel.TabIndex = 1;
+            btnCancel.Text = "Cancel";
+            btnCancel.UseVisualStyleBackColor = true;
+            btnCancel.Click += btnCancel_Click;
             // 
             // SalaryIssue
             // 
@@ -345,10 +346,10 @@
             groupBox1.PerformLayout();
             groupBox2.ResumeLayout(false);
             groupBox2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)udBasic).EndInit();
-            ((System.ComponentModel.ISupportInitialize)udOvertime).EndInit();
-            ((System.ComponentModel.ISupportInitialize)udAdvance).EndInit();
             ((System.ComponentModel.ISupportInitialize)udFine).EndInit();
+            ((System.ComponentModel.ISupportInitialize)udAdvance).EndInit();
+            ((System.ComponentModel.ISupportInitialize)udOvertime).EndInit();
+            ((System.ComponentModel.ISupportInitialize)udBasic).EndInit();
             ResumeLayout(false);
         }
 

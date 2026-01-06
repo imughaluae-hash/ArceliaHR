@@ -187,6 +187,7 @@
             brtnClose.Name = "brtnClose";
             brtnClose.Size = new Size(40, 22);
             brtnClose.Text = "Close";
+            brtnClose.Click += brtnClose_Click;
             // 
             // EmployeeStatementForm
             // 

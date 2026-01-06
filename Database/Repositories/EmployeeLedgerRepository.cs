@@ -54,6 +54,28 @@ namespace ArceliaHR.Database.Repositories
                 ReferenceMonth = referenceMonth
             });
         }
+        public List<LedgerEntryModel> GetAllEntries(int employeeId)
+        {
+            using var conn = DbServices.DbContext.Open();
+
+            return conn.Query<LedgerEntryModel>(@"
+        SELECT * FROM EmployeeLedger
+        WHERE EmployeeId = @EmployeeId
+        ORDER BY TranDate, Id
+    ", new { EmployeeId = employeeId }).ToList();
+        }
+        public decimal GetDueAmount(int employeeId, string tranType)
+        {
+            using var conn = DbContext.Open();
+
+            return conn.ExecuteScalar<decimal>(@"
+        SELECT IFNULL(SUM(Debit - Credit), 0)
+        FROM EmployeeLedger
+        WHERE EmployeeId = @EmployeeId
+          AND TranType = @TranType
+    ",
+            new { EmployeeId = employeeId, TranType = tranType });
+        }
 
         public decimal GetBalance(int employeeId)
         {
@@ -65,7 +87,18 @@ namespace ArceliaHR.Database.Repositories
                 WHERE EmployeeId = @EmployeeId
             ", new { EmployeeId = employeeId });
         }
+        public List<LedgerEntryModel> GetByEmployee(int employeeId)
+        {
+            using var conn = DbContext.Open();
 
+            return conn.Query<LedgerEntryModel>(@"
+        SELECT *
+        FROM EmployeeLedger
+        WHERE EmployeeId = @EmployeeId
+        ORDER BY TranDate, Id
+    ",
+            new { EmployeeId = employeeId }).ToList();
+        }
         public bool IsSalaryIssued(int employeeId, string referenceMonth)
         {
             using var conn = DbContext.Open();
