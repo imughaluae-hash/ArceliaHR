@@ -61,11 +61,9 @@
             passportIssueDate = new DateTimePicker();
             groupBox3 = new GroupBox();
             label16 = new Label();
-            IDCardNumber = new TextBox();
             IDNumber = new TextBox();
             IDExpiryDate = new DateTimePicker();
             label15 = new Label();
-            label14 = new Label();
             groupBox4 = new GroupBox();
             cmbDepart = new ComboBox();
             label17 = new Label();
@@ -80,11 +78,14 @@
             btnClear = new Button();
             txtStatus = new TextBox();
             label18 = new Label();
+            label14 = new Label();
+            udBasicSalary = new NumericUpDown();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)empPicture).BeginInit();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
             groupBox4.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)udBasicSalary).BeginInit();
             SuspendLayout();
             // 
             // label1
@@ -413,16 +414,14 @@
             // groupBox3
             // 
             groupBox3.Controls.Add(label16);
-            groupBox3.Controls.Add(IDCardNumber);
             groupBox3.Controls.Add(IDNumber);
             groupBox3.Controls.Add(IDExpiryDate);
             groupBox3.Controls.Add(label15);
-            groupBox3.Controls.Add(label14);
             groupBox3.Location = new Point(301, 302);
             groupBox3.Margin = new Padding(4, 3, 4, 3);
             groupBox3.Name = "groupBox3";
             groupBox3.Padding = new Padding(4, 3, 4, 3);
-            groupBox3.Size = new Size(276, 123);
+            groupBox3.Size = new Size(276, 86);
             groupBox3.TabIndex = 3;
             groupBox3.TabStop = false;
             groupBox3.Text = "ID Card Information";
@@ -437,14 +436,6 @@
             label16.TabIndex = 0;
             label16.Text = "ID Number:";
             // 
-            // IDCardNumber
-            // 
-            IDCardNumber.Location = new Point(124, 53);
-            IDCardNumber.Margin = new Padding(4, 3, 4, 3);
-            IDCardNumber.Name = "IDCardNumber";
-            IDCardNumber.Size = new Size(132, 23);
-            IDCardNumber.TabIndex = 17;
-            // 
             // IDNumber
             // 
             IDNumber.Location = new Point(124, 23);
@@ -456,7 +447,7 @@
             // IDExpiryDate
             // 
             IDExpiryDate.Format = DateTimePickerFormat.Custom;
-            IDExpiryDate.Location = new Point(124, 83);
+            IDExpiryDate.Location = new Point(124, 55);
             IDExpiryDate.Margin = new Padding(4, 3, 4, 3);
             IDExpiryDate.Name = "IDExpiryDate";
             IDExpiryDate.ShowCheckBox = true;
@@ -466,22 +457,13 @@
             // label15
             // 
             label15.AutoSize = true;
-            label15.Location = new Point(10, 89);
+            label15.Location = new Point(10, 61);
             label15.Margin = new Padding(4, 0, 4, 0);
             label15.Name = "label15";
             label15.Size = new Size(83, 15);
             label15.TabIndex = 0;
             label15.Text = "ID Expiry Date:";
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Location = new Point(10, 58);
-            label14.Margin = new Padding(4, 0, 4, 0);
-            label14.Name = "label14";
-            label14.Size = new Size(82, 15);
-            label14.TabIndex = 0;
-            label14.Text = "Card Number:";
+            label15.Click += label15_Click;
             // 
             // groupBox4
             // 
@@ -619,6 +601,28 @@
             label18.TabIndex = 10;
             label18.Text = "Status";
             // 
+            // label14
+            // 
+            label14.AutoSize = true;
+            label14.Location = new Point(311, 396);
+            label14.Margin = new Padding(4, 0, 4, 0);
+            label14.Name = "label14";
+            label14.Size = new Size(68, 15);
+            label14.TabIndex = 0;
+            label14.Text = "Basic Salary";
+            label14.Click += label15_Click;
+            // 
+            // udBasicSalary
+            // 
+            udBasicSalary.DecimalPlaces = 2;
+            udBasicSalary.Location = new Point(425, 394);
+            udBasicSalary.Maximum = new decimal(new int[] { 1000000, 0, 0, 0 });
+            udBasicSalary.Name = "udBasicSalary";
+            udBasicSalary.Size = new Size(132, 23);
+            udBasicSalary.TabIndex = 41;
+            udBasicSalary.TextAlign = HorizontalAlignment.Right;
+            udBasicSalary.ThousandsSeparator = true;
+            // 
             // EmpForm
             // 
             AcceptButton = btnSave;
@@ -626,9 +630,11 @@
             AutoScaleMode = AutoScaleMode.Font;
             CancelButton = btnCancel;
             ClientSize = new Size(599, 538);
+            Controls.Add(udBasicSalary);
             Controls.Add(label18);
             Controls.Add(label36);
             Controls.Add(btnClear);
+            Controls.Add(label14);
             Controls.Add(btnStatus);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
@@ -655,6 +661,7 @@
             groupBox3.PerformLayout();
             groupBox4.ResumeLayout(false);
             groupBox4.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)udBasicSalary).EndInit();
             ResumeLayout(false);
             PerformLayout();
 
@@ -697,8 +704,6 @@
         private System.Windows.Forms.TextBox IDNumber;
         private System.Windows.Forms.DateTimePicker IDExpiryDate;
         private System.Windows.Forms.Label label15;
-        private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.TextBox IDCardNumber;
         private System.Windows.Forms.GroupBox groupBox4;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.TextBox txtWork;
@@ -713,5 +718,7 @@
         private Button btnClear;
         private TextBox txtStatus;
         private Label label18;
+        private Label label14;
+        private NumericUpDown udBasicSalary;
     }
 }

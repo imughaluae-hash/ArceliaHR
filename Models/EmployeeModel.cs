@@ -20,7 +20,6 @@
         public DateTime? PassportExpiryDate { get; set; }
 
         public string? IDNumber { get; set; }
-        public string? IDCardNumber { get; set; }
         public DateTime? IDExpiryDate { get; set; }
 
         public string? Work { get; set; }
@@ -28,6 +27,26 @@
 
         public byte[]? Picture { get; set; }
         public string? Status { get; set; }
+        public decimal? BasicSalary { get; set; }
     }
+    //public class SalaryTransactionModel
+    //{
+    //    public int Id { get; set; }
+    //    public int EmployeeId { get; set; }
+
+    //    public DateTime TranDate { get; set; }
+
+    //    // ADVANCE, FINE, ADJUSTMENT, SALARY
+    //    public string? TranType { get; set; }
+
+    //    // +ve or -ve decided by type
+    //    public decimal Amount { get; set; }
+
+    //    public string? Description { get; set; }
+
+    //    // Optional but powerful
+    //    public string? RefMonth { get; set; } // "2026-01"
+    //}
+
 
 }

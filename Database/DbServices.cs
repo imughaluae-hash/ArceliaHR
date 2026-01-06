@@ -54,15 +54,16 @@ namespace ArceliaHR.Database
                     PassportExpiryDate TEXT,
 
                     IDNumber TEXT,
-                    IDCardNumber TEXT,
                     IDExpiryDate TEXT,
 
                     Work TEXT,
                     Department TEXT,
 
                     Picture BLOB,
-                    Status TEXT
+                    Status TEXT,
+                    BasicSalary REAL NOT NULL DEFAULT 0
                  );");
+
                 conn.Execute(@"
                 CREATE TABLE IF NOT EXISTS Attendance (
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -111,6 +112,22 @@ namespace ArceliaHR.Database
 
                     FOREIGN KEY(EmployeeId) REFERENCES Employees(Id)
                 );");
+
+                conn.Execute(@"
+                    CREATE INDEX IF NOT EXISTS IX_Ledger_Employee
+                    ON EmployeeLedger(EmployeeId);
+                 ");
+
+                 conn.Execute(@"
+                    CREATE INDEX IF NOT EXISTS IX_Ledger_Employee_Date
+                    ON EmployeeLedger(EmployeeId, TranDate);
+                 ");
+
+                   conn.Execute(@"
+                    CREATE INDEX IF NOT EXISTS IX_Ledger_RefMonth
+                    ON EmployeeLedger(ReferenceMonth);
+                 ");
+
             }
         }
     }
