@@ -1,12 +1,9 @@
 ﻿using ArceliaHR.Database.Repositories;
+using ArceliaHR.Models;
+using ArceliaHR.Services;
 using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
+using System.ComponentModel.Design.Serialization;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace ArceliaHR
@@ -18,12 +15,8 @@ namespace ArceliaHR
             InitializeComponent();
         }
 
-        private void btnClose_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
         public int EmployeeId { get; private set; }
-
+        public decimal? BacissSalary { get; private set; }
 
         public void SetEmployee(int empId, string empName, string department, string status)
         {
@@ -35,82 +28,126 @@ namespace ArceliaHR
 
             LoadStatement();
         }
+
         private void LoadStatement()
         {
+            var repoEmployee = new EmployeeRepository();
+            var employee = repoEmployee.GetById(EmployeeId);
+
             var ledgerRepo = new EmployeeLedgerRepository();
-            var ledgerEntries = ledgerRepo.GetAllEntries(EmployeeId);
 
-            decimal runningBalance = 0;
-            int sn = 1;
-            var rows = new List<object>();
+            var today = DateTime.Today;
 
-            foreach (var entry in ledgerEntries)
-            {
-                decimal amount = 0;
-                decimal paid = 0;
+            // 🔹 TODO: Load from Employees table
+            decimal? basicSalary = employee!.BasicSalary;
+            BacissSalary = employee!.BasicSalary;
 
-                switch (entry.TranType)
-                {
-                    case "ADVANCE":
-                    case "FINE":
-                        paid = entry.Debit;
-                        amount = 0;
-                        runningBalance -= paid;
-                        break;
+            var attendanceRepo = new AttendanceRepository();
+            var attendanceService = new AttendanceSummaryService(attendanceRepo);
 
-                    case "SALARY":
-                        amount = entry.Credit;
-                        paid = 0;
-                        runningBalance += amount;
-                        break;
+            var salaryTillToday = attendanceService.CalculateSalaryTillDate(
+                EmployeeId,
+                basicSalary,
+                today.Year,
+                today.Month,
+                today
+            );
 
-                    case "RECOVERY": // advance deduction
-                        paid = entry.Credit;
-                        amount = 0;
-                        runningBalance -= paid;
-                        break;
-                }
+            decimal currentSalaryTillToday = salaryTillToday.TotalSalary;
 
-                rows.Add(new
-                {
-                    SN = sn++,
-                    Date = entry.TranDate.ToString("dd/MM/yyyy"),
-                    Description = entry.Description,
-                    Amount = amount,
-                    Paid = paid,
-                    RunningBalance = runningBalance
-                });
-            }
+            var statementRows = ledgerRepo.BuildStatement(
+                EmployeeId,
+                currentSalaryTillToday,
+                today
+            );
 
-            // Optional: add final summary row if salary exists
-            var totalSalaryPaid = ledgerEntries
-                .Where(x => x.TranType == "SALARY")
-                .Sum(x => x.Credit)
-                - ledgerEntries.Where(x => x.TranType == "RECOVERY").Sum(x => x.Credit);
+            dgStatement.AutoGenerateColumns = true;
+            dgStatement.DataSource = statementRows;
 
-            if (totalSalaryPaid > 0)
-            {
-                rows.Add(new
-                {
-                    SN = sn,
-                    Date = "",
-                    Description = $"Total Salary Paid for {ledgerEntries.FirstOrDefault(x => x.TranType == "SALARY")?.ReferenceMonth}",
-                    Amount = 0,
-                    Paid = totalSalaryPaid,
-                    RunningBalance = 0
-                });
-            }
+            if (statementRows.Any())
+                lblBalance.Text =
+                    $"Current Balance: {statementRows.Last().RunningBalance:N2}";
+            else
+                lblBalance.Text = "Current Balance: 0.00";
 
-            dgStatement.DataSource = rows;
-
-            // Update current balance label
-            lblBalance.Text = $"Current Balance: {ledgerRepo.GetBalance(EmployeeId):N2}";
+            FormatGrid();
         }
 
-
-        private void brtnClose_Click(object sender, EventArgs e)
+        private void FormatGrid()
         {
-            this.Close();
+            dgStatement.Columns["SN"].Width = 50;
+            dgStatement.Columns["Date"].DefaultCellStyle.Format = "dd/MM/yyyy";
+
+            dgStatement.Columns["DueAmount"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleRight;
+            dgStatement.Columns["Paid"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleRight;
+            dgStatement.Columns["RunningBalance"].DefaultCellStyle.Alignment =
+                DataGridViewContentAlignment.MiddleRight;
+
+            dgStatement.Columns["DueAmount"].DefaultCellStyle.Format = "N2";
+            dgStatement.Columns["Paid"].DefaultCellStyle.Format = "N2";
+            dgStatement.Columns["RunningBalance"].DefaultCellStyle.Format = "N2";
+
+            dgStatement.ReadOnly = true;
+            dgStatement.AllowUserToAddRows = false;
         }
+
+        private void btnClose_Click(object sender, EventArgs e)
+        {
+            Close();
+        }
+
+        private void dgStatement_CellDoubleClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0) return;
+
+            var row = dgStatement.Rows[e.RowIndex];
+            var desc = row.Cells["Description"].Value?.ToString();
+
+            if (desc != "Current Salary Till Today")
+                return;
+
+            ShowSalaryBreakdownPopup();
+        }
+        private void ShowSalaryBreakdownPopup()
+        {
+            var today = DateTime.Today;
+
+            var attendanceRepo = new AttendanceRepository();
+            var attendanceService = new AttendanceSummaryService(attendanceRepo);
+
+            var summary = attendanceService.GetMonthlySummary(
+                EmployeeId,
+                today.Year,
+                today.Month,
+                today
+            );
+
+            decimal basicSalary = (decimal)BacissSalary!/* load from Employee table */;
+            var salary = SalaryCalculator.Calculate(basicSalary, summary);
+
+            var text = $@"
+Name:           {lblName.Text}
+Month:          {today:MMM yyyy}
+Period:         01 {today:MMM yyyy} → {today:dd MMM yyyy}
+
+Basic Salary:   {basicSalary:N2}
+
+Days Present:   {summary.PresentDays} x {salary.PerDayRate:N2} = {salary.PresentPay:N2}
+Overtime Hours: {summary.OvertimeHours} x {salary.HourlyRate:N2} = {salary.OvertimePay:N2}
+
+--------------------------------
+Total Salary Till Today: {salary.TotalSalary:N2}
+";
+
+            MessageBox.Show(
+                text.Trim(),
+                "Salary Breakdown",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+        }
+
     }
 }

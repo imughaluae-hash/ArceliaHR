@@ -16,7 +16,7 @@ SELECT
     e.Name AS EmployeeName,
     IFNULL(a.Id, 0) AS Id,
     @Date AS AttDate,
-    IFNULL(a.Status, 'P') AS Status,
+    IFNULL(a.Status, 'A') AS Status,
     IFNULL(a.OvertimeHours, 0) AS OvertimeHours,
     a.Remarks
 FROM Employees e
@@ -44,7 +44,7 @@ ORDER BY e.Name;
             e.Name AS EmployeeName,
             IFNULL(a.Id, 0) AS Id,
             a.AttDate,
-            IFNULL(a.Status, 'P') AS Status,
+            IFNULL(a.Status, 'A') AS Status,
             IFNULL(a.OvertimeHours, 0) AS OvertimeHours,
             a.Remarks
         FROM Employees e

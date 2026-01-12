@@ -159,6 +159,7 @@
             dgStatement.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgStatement.Size = new Size(535, 591);
             dgStatement.TabIndex = 0;
+            dgStatement.CellDoubleClick += dgStatement_CellDoubleClick;
             // 
             // toolStrip1
             // 
@@ -187,7 +188,6 @@
             brtnClose.Name = "brtnClose";
             brtnClose.Size = new Size(40, 22);
             brtnClose.Text = "Close";
-            brtnClose.Click += brtnClose_Click;
             // 
             // EmployeeStatementForm
             // 

@@ -1,0 +1,161 @@
+Folder PATH listing for volume WINDOWS 10
+Volume serial number is F656-C044
+C:.
+|   .gitattributes
+|   .gitignore
+|   AddFileForm.cs
+|   AddFileForm.Designer.cs
+|   AddFileForm.resx
+|   AdvanceFineForm.cs
+|   AdvanceFineForm.Designer.cs
+|   AdvanceFineForm.resx
+|   App.config
+|   ArceliaHR.csproj
+|   ArceliaHR.csproj.user
+|   ArceliaHR.slnx
+|   Attendance.cs
+|   Attendance.Designer.cs
+|   Attendance.resx
+|   empForm.cs
+|   empForm.Designer.cs
+|   empForm.resx
+|   EmployeeStatementForm.cs
+|   EmployeeStatementForm.Designer.cs
+|   EmployeeStatementForm.resx
+|   Files.cs
+|   Files.Designer.cs
+|   Files.resx
+|   MainForm.cs
+|   MainForm.Designer.cs
+|   MainForm.resx
+|   MonthlyAttendanceForm.cs
+|   MonthlyAttendanceForm.Designer.cs
+|   MonthlyAttendanceForm.resx
+|   PaymentCenter.cs
+|   PaymentCenter.Designer.cs
+|   PaymentCenter.resx
+|   Program.cs
+|   SalaryIssue.cs
+|   SalaryIssue.Designer.cs
+|   SalaryIssue.resx
+|   SortableBindings.cs
+|   tree.txt
+|   
++---bin
+|   \---Debug
+|       |   ArceliaHR.1.0.0.nupkg
+|       |   
+|       \---net8.0-windows
+|           |   ArceliaHR.deps.json
+|           |   ArceliaHR.dll
+|           |   ArceliaHR.dll.config
+|           |   ArceliaHR.exe
+|           |   ArceliaHR.pdb
+|           |   ArceliaHR.runtimeconfig.json
+|           |   Dapper.dll
+|           |   System.Data.SQLite.dll
+|           |   
+|           \---runtimes
+|               +---linux-x64
+|               |   \---native
+|               |           SQLite.Interop.dll
+|               |           
+|               +---osx-x64
+|               |   \---native
+|               |           SQLite.Interop.dll
+|               |           
+|               +---win-x64
+|               |   \---native
+|               |           SQLite.Interop.dll
+|               |           
+|               \---win-x86
+|                   \---native
+|                           SQLite.Interop.dll
+|                           
++---Database
+|   |   DbServices.cs
+|   |   
+|   \---Repositories
+|           AttendanceRepository.cs
+|           AttendanceSummaryService.cs
+|           EmployeeLedgerRepository.cs
+|           EmployeeRepository.cs
+|           FileRepository.cs
+|           IEmployeeRepository.cs
+|           PayrollService.cs
+|           SalaryCalculator.cs
+|           
++---HTML
+|       laborCard.html
+|       
++---Models
+|       AttendanceModel.cs
+|       AttendanceSummary.cs
+|       EmployeeModel.cs
+|       FileModel.cs
+|       LedgerEntryModel.cs
+|       SalaryResult.cs
+|       
++---obj
+|   |   ArceliaHR.csproj.nuget.dgspec.json
+|   |   ArceliaHR.csproj.nuget.g.props
+|   |   ArceliaHR.csproj.nuget.g.targets
+|   |   project.assets.json
+|   |   project.nuget.cache
+|   |   
+|   \---Debug
+|       |   ArceliaHR.1.0.0.nuspec
+|       |   
+|       \---net8.0-windows
+|           |   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+|           |   apphost.exe
+|           |   ArceliaHR.AddFileForm.resources
+|           |   ArceliaHR.AdvanceFineForm.resources
+|           |   ArceliaHR.AssemblyInfo.cs
+|           |   ArceliaHR.AssemblyInfoInputs.cache
+|           |   ArceliaHR.assets.cache
+|           |   ArceliaHR.Attendance.resources
+|           |   ArceliaHR.csproj.AssemblyReference.cache
+|           |   ArceliaHR.csproj.BuildWithSkipAnalyzers
+|           |   ArceliaHR.csproj.CoreCompileInputs.cache
+|           |   ArceliaHR.csproj.FileListAbsolute.txt
+|           |   ArceliaHR.csproj.GenerateResource.cache
+|           |   ArceliaHR.csproj.Up2Date
+|           |   ArceliaHR.designer.deps.json
+|           |   ArceliaHR.designer.runtimeconfig.json
+|           |   ArceliaHR.dll
+|           |   ArceliaHR.EmpForm.resources
+|           |   ArceliaHR.EmployeeStatementForm.resources
+|           |   ArceliaHR.Files.resources
+|           |   ArceliaHR.GeneratedMSBuildEditorConfig.editorconfig
+|           |   ArceliaHR.genruntimeconfig.cache
+|           |   ArceliaHR.GlobalUsings.g.cs
+|           |   ArceliaHR.MainForm.resources
+|           |   ArceliaHR.MonthlyAttendanceForm.resources
+|           |   ArceliaHR.PaymentCenter.resources
+|           |   ArceliaHR.pdb
+|           |   ArceliaHR.Properties.Resources.resources
+|           |   ArceliaHR.SalaryIssue.resources
+|           |   ArceliaHR.sourcelink.json
+|           |   
+|           +---ref
+|           |       ArceliaHR.dll
+|           |       
+|           +---refint
+|           |       ArceliaHR.dll
+|           |       
+|           \---TempPE
+|                   Properties.Resources.Designer.cs.dll
+|                   
++---Properties
+|       Resources.Designer.cs
+|       Resources.resx
+|       Settings.Designer.cs
+|       Settings.settings
+|       
+\---Resources
+        excel_icon.png
+        file_icon.png
+        pdf_icon.png
+        word_icon.png
+        
