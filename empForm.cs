@@ -109,13 +109,16 @@ namespace ArceliaHR
             passportExpiryDate.Value = DateTime.Today;
 
             //ID Card Information
-            IDCardNumber.Text = "";
+            
             IDNumber.Text = "";
             IDExpiryDate.Value = DateTime.Today;
 
             //Visa Information
             txtWork.Text = "";
             cmbDepart.Text = "";
+
+            //Basic Salary
+            udBasicSalary.Value = udBasicSalary.Minimum;
 
         }
 
@@ -126,6 +129,9 @@ namespace ArceliaHR
 
         private void btnSave_Click(object sender, EventArgs e)
         {
+            this.Validate();
+            _bs.EndEdit();
+
             if (_employee == null)
             {
                 MessageBox.Show("Employee data is not loaded.");
@@ -235,13 +241,14 @@ namespace ArceliaHR
             BindDate(passportExpiryDate, "PassportExpiryDate");
 
             IDNumber.DataBindings.Add("Text", _bs, "IDNumber");
-            IDCardNumber.DataBindings.Add("Text", _bs, "IDCardNumber");
+            
             BindDate(IDExpiryDate, "IDExpiryDate");
 
             txtWork.DataBindings.Add("Text", _bs, "Work");
             cmbDepart.DataBindings.Add("Text", _bs, "Department");
 
             txtStatus.DataBindings.Add("Text", _bs, "Status");
+            udBasicSalary.DataBindings.Add("Value", _bs, "BasicSalary", true, DataSourceUpdateMode.OnPropertyChanged);
         }
         private void BindDate(DateTimePicker picker, string propertyName)
         {

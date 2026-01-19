@@ -15,14 +15,14 @@ namespace ArceliaHR.Database.Repositories
                 Name, FatherName, Religion, MaritalStatus, Gender, DateOfBirth,
                 Mobile, ICEContact, Nationality, Relation,
                 PassportNumber, PassportIssueDate, PassportExpiryDate,
-                IDNumber, IDCardNumber, IDExpiryDate,
+                IDNumber, BasicSalary, IDExpiryDate,
                 Work, Department, Picture, Status
                 )
                 VALUES (
                 @Name, @FatherName, @Religion, @MaritalStatus, @Gender, @DateOfBirth,
                 @Mobile, @ICEContact, @Nationality, @Relation,
                 @PassportNumber, @PassportIssueDate, @PassportExpiryDate,
-                @IDNumber, @IDCardNumber, @IDExpiryDate,
+                @IDNumber, @BasicSalary, @IDExpiryDate,
                 @Work, @Department, @Picture, @Status
                 )", employee);
         }
@@ -78,7 +78,7 @@ namespace ArceliaHR.Database.Repositories
             PassportExpiryDate = @PassportExpiryDate,
 
             IDNumber = @IDNumber,
-            IDCardNumber = @IDCardNumber,
+            BasicSalary = @BasicSalary,
             IDExpiryDate = @IDExpiryDate,
 
             Work = @Work,

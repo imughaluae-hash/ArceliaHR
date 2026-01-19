@@ -20,7 +20,6 @@
         public DateTime? PassportExpiryDate { get; set; }
 
         public string? IDNumber { get; set; }
-        public string? IDCardNumber { get; set; }
         public DateTime? IDExpiryDate { get; set; }
 
         public string? Work { get; set; }
@@ -28,6 +27,7 @@
 
         public byte[]? Picture { get; set; }
         public string? Status { get; set; }
+        public decimal? BasicSalary { get; set; }
     }
 
 }

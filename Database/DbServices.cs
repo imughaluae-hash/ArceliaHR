@@ -24,14 +24,23 @@ namespace ArceliaHR.Database
                 return conn;
 
             }
-            private static string BuildConnectionString()
-            {
-                string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
-                string folder = Path.Combine(appData, "ArceliaHR");
-                if (!Directory.Exists(folder)) Directory.CreateDirectory(folder);
-                string dbPath = Path.Combine(folder, "ArceliaHR.db");
-                return $"Data Source={dbPath};Version=3;";
-            }
+private static string BuildConnectionString()
+{
+#if DEBUG
+    string appFolderName = "ArceliaHR_DEV";
+#else
+    string appFolderName = "ArceliaHR";
+#endif
+
+    string appData = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData);
+    string folder = Path.Combine(appData, appFolderName);
+
+    if (!Directory.Exists(folder))
+        Directory.CreateDirectory(folder);
+
+    string dbPath = Path.Combine(folder, "ArceliaHR.db");
+    return $"Data Source={dbPath};Version=3;";
+}
             private static void CreatTables(IDbConnection conn)
             {
                 conn.Execute(@"
@@ -39,6 +48,7 @@ namespace ArceliaHR.Database
                     Id INTEGER PRIMARY KEY AUTOINCREMENT,
                     Name TEXT,
                     FatherName TEXT,
+                    BasicSalary REAL NOT NULL DEFAULT 0,
                     Religion TEXT,
                     MaritalStatus TEXT,
                     Gender TEXT,
@@ -54,7 +64,6 @@ namespace ArceliaHR.Database
                     PassportExpiryDate TEXT,
 
                     IDNumber TEXT,
-                    IDCardNumber TEXT,
                     IDExpiryDate TEXT,
 
                     Work TEXT,
@@ -62,6 +71,7 @@ namespace ArceliaHR.Database
 
                     Picture BLOB,
                     Status TEXT
+
                  );");
                 conn.Execute(@"
                 CREATE TABLE IF NOT EXISTS Attendance (

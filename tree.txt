@@ -1,0 +1,81 @@
+Folder PATH listing for volume WINDOWS 10
+Volume serial number is F656-C044
+C:.
+³   .gitattributes
+³   .gitignore
+³   AddFileForm.cs
+³   AddFileForm.Designer.cs
+³   AddFileForm.resx
+³   App.config
+³   ArceliaHR.csproj
+³   ArceliaHR.slnx
+³   Attendance.cs
+³   Attendance.Designer.cs
+³   Attendance.resx
+³   empForm.cs
+³   empForm.Designer.cs
+³   empForm.resx
+³   Files.cs
+³   Files.Designer.cs
+³   Files.resx
+³   MainForm.cs
+³   MainForm.Designer.cs
+³   MainForm.resx
+³   MonthlyAttendanceForm.cs
+³   MonthlyAttendanceForm.Designer.cs
+³   MonthlyAttendanceForm.resx
+³   Program.cs
+³   SortableBindings.cs
+³   tree.txt
+³   
+ÃÄÄÄbin
+³   ÀÄÄÄDebug
+³       ÀÄÄÄnet8.0-windows
+ÃÄÄÄDatabase
+³   ³   DbServices.cs
+³   ³   
+³   ÀÄÄÄRepositories
+³           AttendanceRepository.cs
+³           EmployeeRepository.cs
+³           FileRepository.cs
+³           IEmployeeRepository.cs
+³           
+ÃÄÄÄHTML
+³       laborCard.html
+³       
+ÃÄÄÄModels
+³       AttendanceModel.cs
+³       EmployeeModel.cs
+³       FileModel.cs
+³       
+ÃÄÄÄobj
+³   ³   ArceliaHR.csproj.nuget.dgspec.json
+³   ³   ArceliaHR.csproj.nuget.g.props
+³   ³   ArceliaHR.csproj.nuget.g.targets
+³   ³   project.assets.json
+³   ³   project.nuget.cache
+³   ³   
+³   ÀÄÄÄDebug
+³       ÀÄÄÄnet8.0-windows
+³           ³   .NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+³           ³   ArceliaHR.AssemblyInfo.cs
+³           ³   ArceliaHR.AssemblyInfoInputs.cache
+³           ³   ArceliaHR.assets.cache
+³           ³   ArceliaHR.csproj.AssemblyReference.cache
+³           ³   ArceliaHR.GeneratedMSBuildEditorConfig.editorconfig
+³           ³   ArceliaHR.GlobalUsings.g.cs
+³           ³   
+³           ÃÄÄÄref
+³           ÀÄÄÄrefint
+ÃÄÄÄProperties
+³       Resources.Designer.cs
+³       Resources.resx
+³       Settings.Designer.cs
+³       Settings.settings
+³       
+ÀÄÄÄResources
+        excel_icon.png
+        file_icon.png
+        pdf_icon.png
+        word_icon.png
+        
