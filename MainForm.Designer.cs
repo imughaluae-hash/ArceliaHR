@@ -42,6 +42,7 @@
             cmbSearch = new ToolStripComboBox();
             toolStripSeparator2 = new ToolStripSeparator();
             btnTest = new ToolStripButton();
+            btnSettings = new ToolStripButton();
             panelGrid = new Panel();
             dgList = new DataGridView();
             tsMain.SuspendLayout();
@@ -51,7 +52,7 @@
             // 
             // tsMain
             // 
-            tsMain.Items.AddRange(new ToolStripItem[] { btnAddEmp, btnViewEmp, btnEditEmp, btnDelEmp, btnFiles, btnAttend, btnPay, toolStripSeparator1, txtSearch, cmbSearch, toolStripSeparator2, btnTest });
+            tsMain.Items.AddRange(new ToolStripItem[] { btnAddEmp, btnViewEmp, btnEditEmp, btnDelEmp, btnFiles, btnAttend, btnPay, toolStripSeparator1, txtSearch, cmbSearch, toolStripSeparator2, btnTest, btnSettings });
             tsMain.Location = new Point(0, 0);
             tsMain.Name = "tsMain";
             tsMain.Size = new Size(800, 38);
@@ -153,6 +154,16 @@
             btnTest.Size = new Size(47, 35);
             btnTest.Text = "Test";
             // 
+            // btnSettings
+            // 
+            btnSettings.Image = (Image)resources.GetObject("btnSettings.Image");
+            btnSettings.ImageTransparentColor = Color.Magenta;
+            btnSettings.Name = "btnSettings";
+            btnSettings.Size = new Size(53, 35);
+            btnSettings.Text = "Settings";
+            btnSettings.TextImageRelation = TextImageRelation.ImageAboveText;
+            btnSettings.Click += btnSettings_Click;
+            // 
             // panelGrid
             // 
             panelGrid.Controls.Add(dgList);
@@ -215,5 +226,6 @@
         private ToolStripSeparator toolStripSeparator2;
         private ToolStripButton btnPay;
         private ToolStripButton btnTest;
+        private ToolStripButton btnSettings;
     }
 }

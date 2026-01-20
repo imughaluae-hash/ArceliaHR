@@ -268,6 +268,23 @@ namespace ArceliaHR
             );
 
             picker.Tag = propertyName; // store property name safely
+            
+            // Auto-check if the property has a value - use BeginInvoke to defer until after binding completes
+            if (_employee != null)
+            {
+                var prop = typeof(EmployeeModel).GetProperty(propertyName);
+                var value = prop?.GetValue(_employee) as DateTime?;
+                if (value.HasValue)
+                {
+                    // Defer the update until after the data binding is fully established
+                    this.BeginInvoke(new Action(() =>
+                    {
+                        picker.Checked = true;
+                        picker.CustomFormat = "dd/MM/yyyy";
+                    }));
+                }
+            }
+
             picker.ValueChanged += DatePicker_ValueChanged;
         }
 
@@ -282,7 +299,8 @@ namespace ArceliaHR
 
             if (picker.Checked)
             {
-                prop.SetValue(_employee, picker.Value);
+                // Use .Date to save only the date part without time
+                prop.SetValue(_employee, picker.Value.Date);
                 picker.CustomFormat = "dd/MM/yyyy";
             }
             else

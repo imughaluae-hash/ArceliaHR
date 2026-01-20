@@ -10,6 +10,8 @@ namespace ArceliaHR
 
         private readonly IEmployeeRepository _employees = new EmployeeRepository();
         private BindingSource _bsEmployees = new BindingSource();
+        private List<EmployeeModel> _allEmployees = new List<EmployeeModel>();
+        private string _currentSearchColumn = "Name";
 
         public MainForm()
         {
@@ -19,6 +21,7 @@ namespace ArceliaHR
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            InitializeSearchControls();
             LoadEmployees();
             UpdateEditButtonState();
         }
@@ -76,8 +79,9 @@ namespace ArceliaHR
             dgList.AllowUserToAddRows = false;
             dgList.AllowUserToDeleteRows = false;
 
-            var employees = _employees.GetAll().ToList();
-            _bsEmployees.DataSource = new SortableBindingList<EmployeeModel>(employees);
+            // Load all employees and store them
+            _allEmployees = _employees.GetAll().ToList();
+            _bsEmployees.DataSource = _allEmployees;
             dgList.DataSource = _bsEmployees;
 
             if (dgList.Columns["Id"] != null)
@@ -156,6 +160,16 @@ namespace ArceliaHR
                 picCol.SortMode = DataGridViewColumnSortMode.NotSortable; // images cannot sort
             }
 
+            // Format date columns to show only date (no time)
+            string[] dateColumns = { "DateOfBirth", "PassportIssueDate", "PassportExpiryDate", "IDExpiryDate" };
+            foreach (string dateCol in dateColumns)
+            {
+                if (dgList.Columns[dateCol] != null)
+                {
+                    dgList.Columns[dateCol].DefaultCellStyle.Format = "dd/MM/yyyy";
+                }
+            }
+
             // Other columns
             foreach (DataGridViewColumn col in dgList.Columns)
             {
@@ -202,5 +216,94 @@ namespace ArceliaHR
             var FilesForm = new Files();
             FilesForm.ShowDialog();
         }
+
+        private void btnSettings_Click(object sender, EventArgs e)
+        {
+            var settingsForm = new SettingsForm();
+            settingsForm.ShowDialog();
+        }
+
+        private void InitializeSearchControls()
+        {
+            // Populate search column combobox
+            cmbSearch.Items.Clear();
+            cmbSearch.Items.AddRange(new string[] {
+                "Name",
+                "FatherName",
+                "Religion",
+                "MaritalStatus",
+                "Gender",
+                "Mobile",
+                "ICEContact",
+                "Nationality",
+                "PassportNumber",
+                "IDNumber",
+                "Work",
+                "Department",
+                "Status"
+            });
+            cmbSearch.SelectedIndex = 0; // Default to Name
+            _currentSearchColumn = "Name";
+
+            // Wire up event handlers
+            txtSearch.TextChanged += TxtSearch_TextChanged;
+            cmbSearch.SelectedIndexChanged += CmbSearch_SelectedIndexChanged;
+        }
+
+        private void TxtSearch_TextChanged(object? sender, EventArgs e)
+        {
+            ApplySearchFilter();
+        }
+
+        private void CmbSearch_SelectedIndexChanged(object? sender, EventArgs e)
+        {
+            if (cmbSearch.SelectedItem != null)
+            {
+                _currentSearchColumn = cmbSearch.SelectedItem.ToString() ?? "Name";
+                ApplySearchFilter();
+            }
+        }
+
+        private void ApplySearchFilter()
+        {
+            if (_allEmployees == null || _allEmployees.Count == 0)
+                return;
+
+            string searchText = txtSearch.Text?.Trim() ?? "";
+
+            List<EmployeeModel> filteredList;
+
+            if (string.IsNullOrWhiteSpace(searchText))
+            {
+                // Show all records
+                filteredList = _allEmployees;
+            }
+            else
+            {
+                // Apply filter based on selected column using LINQ
+                filteredList = _allEmployees.Where(emp =>
+                {
+                    var propValue = GetPropertyValue(emp, _currentSearchColumn);
+                    if (propValue == null) return false;
+                    return propValue.IndexOf(searchText, StringComparison.OrdinalIgnoreCase) >= 0;
+                }).ToList();
+            }
+
+            // Update the binding source with filtered data
+            _bsEmployees.DataSource = filteredList;
+            _bsEmployees.ResetBindings(false);
+
+            UpdateEditButtonState();
+        }
+
+        private string GetPropertyValue(EmployeeModel emp, string propertyName)
+        {
+            var prop = typeof(EmployeeModel).GetProperty(propertyName);
+            if (prop == null) return string.Empty;
+
+            var value = prop.GetValue(emp);
+            return value?.ToString() ?? string.Empty;
+        }
     }
 }
+

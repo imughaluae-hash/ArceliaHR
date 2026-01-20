@@ -99,6 +99,15 @@ private static string BuildConnectionString()
                     CreatedAt DATETIME DEFAULT CURRENT_TIMESTAMP,
                     FOREIGN KEY(EmployeeId) REFERENCES Employees(Id)
                 );");
+
+                conn.Execute(@"
+                CREATE TABLE IF NOT EXISTS Settings (
+                    Id INTEGER PRIMARY KEY CHECK (Id = 1),
+                    CompanyName TEXT,
+                    CompanyLogo BLOB,
+                    WorkHoursPerDay REAL NOT NULL DEFAULT 9,
+                    LastModified DATETIME DEFAULT CURRENT_TIMESTAMP
+                );");
             }
         }
     }
