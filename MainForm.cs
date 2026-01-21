@@ -17,6 +17,7 @@ namespace ArceliaHR
         {
             InitializeComponent();
             dgList.DataBindingComplete += DgList_DataBindingComplete;
+            btnPay.Click += btnPay_Click;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -215,6 +216,12 @@ namespace ArceliaHR
         {
             var FilesForm = new Files();
             FilesForm.ShowDialog();
+        }
+
+        private void btnPay_Click(object? sender, EventArgs e)
+        {
+            var form = new PaymentControlPanel();
+            form.ShowDialog();
         }
 
         private void btnSettings_Click(object sender, EventArgs e)

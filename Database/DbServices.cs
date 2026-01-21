@@ -108,6 +108,29 @@ private static string BuildConnectionString()
                     WorkHoursPerDay REAL NOT NULL DEFAULT 9,
                     LastModified DATETIME DEFAULT CURRENT_TIMESTAMP
                 );");
+
+                conn.Execute(@"
+                CREATE TABLE IF NOT EXISTS Transactions (
+                    Id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    EmployeeId INTEGER NOT NULL,
+                    TransDate DATE NOT NULL,
+                    TransType TEXT NOT NULL, 
+                    Amount REAL NOT NULL DEFAULT 0,
+                    Month INTEGER, -- Format: YYYYMM (e.g. 202601), For SalaryDue
+                    Remarks TEXT,
+                    FOREIGN KEY(EmployeeId) REFERENCES Employees(Id)
+                );");
+
+                // Ensure Remarks column exists (Migration for existing DB)
+                try 
+                {
+                    var columns = conn.Query("PRAGMA table_info(Transactions)").Select(x => (string)x.name).ToList();
+                    if (!columns.Contains("Remarks"))
+                    {
+                        conn.Execute("ALTER TABLE Transactions ADD COLUMN Remarks TEXT");
+                    }
+                }
+                catch { /* Ignore if fails */ }
             }
         }
     }

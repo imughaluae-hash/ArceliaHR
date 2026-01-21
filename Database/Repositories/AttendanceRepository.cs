@@ -45,7 +45,7 @@ ORDER BY e.Name;
             IFNULL(a.Id, 0) AS Id,
             a.AttDate,
             IFNULL(a.Status, 'P') AS Status,
-            IFNULL(a.OvertimeHours, 0) AS OvertimeHours,
+            CAST(IFNULL(a.OvertimeHours, 0) AS REAL) AS OvertimeHours,
             a.Remarks
         FROM Employees e
         LEFT JOIN Attendance a
