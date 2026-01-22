@@ -13,7 +13,7 @@ namespace ArceliaHR
         private TransactionRepository _repo = new TransactionRepository();
         private EmployeeRepository _empRepo = new EmployeeRepository();
         private AttendanceRepository _attRepo = new AttendanceRepository();
-        private DataGridView dgList;
+        private DataGridView? dgList;
 
         public EmployeeStatementForm(int employeeId, string employeeName)
         {
@@ -148,7 +148,7 @@ namespace ArceliaHR
             catch { /* Ignore calculation errors for live row */ }
             // --------------------------------------------------------
 
-            dgList.DataSource = statementList;
+            dgList!.DataSource = statementList;
             
             // Format Cols
             if (dgList.Columns["SN"] != null) dgList.Columns["SN"].Width = 40;
@@ -181,7 +181,7 @@ namespace ArceliaHR
             public string Balance { get; set; } = "";
         }
 
-        private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer? components = null;
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null)) components.Dispose();

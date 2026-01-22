@@ -7,8 +7,8 @@ namespace ArceliaHR
     public partial class PaymentControlPanel : Form
     {
         private TransactionRepository _repo = new TransactionRepository();
-        private DataGridView dgActive;
-        private DataGridView dgInactive;
+        private DataGridView? dgActive;
+        private DataGridView? dgInactive;
 
         public PaymentControlPanel()
         {
@@ -85,8 +85,8 @@ namespace ArceliaHR
                 var active = summaries.Where(s => s.Status == "Active").ToList();
                 var inactive = summaries.Where(s => s.Status != "Active").ToList();
 
-                dgActive.DataSource = active;
-                dgInactive.DataSource = inactive;
+                dgActive!.DataSource = active;
+                dgInactive!.DataSource = inactive;
 
                 FormatGrid(dgActive);
                 FormatGrid(dgInactive);
@@ -155,14 +155,14 @@ namespace ArceliaHR
         private EmployeeBalanceModel? GetSelectedEmployee()
         {
             DataGridView? activeGrid = null;
-            if (dgActive.Focused || dgActive.ContainsFocus) activeGrid = dgActive;
-            else if (dgInactive.Focused || dgInactive.ContainsFocus) activeGrid = dgInactive;
+            if (dgActive!.Focused || dgActive.ContainsFocus) activeGrid = dgActive;
+            else if (dgInactive!.Focused || dgInactive.ContainsFocus) activeGrid = dgInactive;
 
             // Fallback: use whichever has selection if focus is elsewhere (like toolbar)
             if (activeGrid == null)
             {
                 if (dgActive.SelectedRows.Count > 0) activeGrid = dgActive;
-                else if (dgInactive.SelectedRows.Count > 0) activeGrid = dgInactive;
+                else if (dgInactive!.SelectedRows.Count > 0) activeGrid = dgInactive;
             }
 
             if (activeGrid != null && activeGrid.CurrentRow != null)
@@ -174,7 +174,7 @@ namespace ArceliaHR
             return null;
         }
 
-        private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer? components = null;
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null)) components.Dispose();

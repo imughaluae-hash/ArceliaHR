@@ -29,7 +29,7 @@ namespace ArceliaHR.Database.Repositories
             return conn.Query<TransactionModel>(query, new { EmployeeId = employeeId });
         }
 
-        public IEnumerable<EmployeeBalanceModel> GetBalanceSummaries(string statusFilter = null)
+        public IEnumerable<EmployeeBalanceModel> GetBalanceSummaries(string? statusFilter = null)
         {
             using var conn = DbContext.Open();
 

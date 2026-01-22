@@ -6,28 +6,28 @@ namespace ArceliaHR
     public partial class SalaryForm : Form
     {
         private int _employeeId;
-        private EmployeeModel _employee;
+        private EmployeeModel? _employee;
         private EmployeeRepository _empRepo = new();
         private AttendanceRepository _attRepo = new();
         private TransactionRepository _transRepo = new();
         
         // Controls
-        private ComboBox cmbMonth;
-        private ComboBox cmbYear;
-        private Label lblBasicData;
-        private Label lblAttData;
-        private NumericUpDown numDeductAdvance; // New control for Partial Deduction
-        private NumericUpDown numDeductFine;    // New control for Partial Deduction
-        private Label lblNetPay;
-        private Button btnSaveDue;
-        private Button btnPayNow;
+        private ComboBox? cmbMonth;
+        private ComboBox? cmbYear;
+        private Label? lblBasicData;
+        private Label? lblAttData;
+        private NumericUpDown? numDeductAdvance; // New control for Partial Deduction
+        private NumericUpDown? numDeductFine;    // New control for Partial Deduction
+        private Label? lblNetPay;
+        private Button? btnSaveDue;
+        private Button? btnPayNow;
         
         // Calculation Results
         private decimal _basicEarned;
         private decimal _otEarned;
         private decimal _totalDue;
         private decimal _advBalance;
-        private decimal _fineBalance;
+        //private decimal _fineBalance;
         private decimal _netPayable;
         private int _selectedMonthKey; // YYYYMM
 
@@ -117,7 +117,7 @@ namespace ArceliaHR
 
         private void LoadEmployee()
         {
-            _employee = _empRepo.GetById(_employeeId);
+            _employee = _empRepo.GetById(_employeeId)!;
             if (_employee == null)
             {
                 MessageBox.Show("Employee not found");
@@ -125,26 +125,26 @@ namespace ArceliaHR
                 return;
             }
             this.Text = $"Salary Calculation - {_employee.Name}";
-            lblBasicData.Text = $"Basic Salary: {_employee.BasicSalary:N2}";
+            lblBasicData!.Text = $"Basic Salary: {_employee.BasicSalary:N2}";
         }
 
         private void CalculateSalary()
         {
-            if (_employee.BasicSalary == null || _employee.BasicSalary == 0)
+            if (_employee!.BasicSalary == null || _employee.BasicSalary == 0)
             {
                 MessageBox.Show("Basic Salary is 0. Please update employee profile.");
                 return;
             }
 
-            int month = cmbMonth.SelectedIndex + 1;
-            int year = (int)cmbYear.SelectedItem;
+            int month = cmbMonth!.SelectedIndex + 1;
+            int year = (int)cmbYear!.SelectedItem!;
             _selectedMonthKey = (year * 100) + month;
 
             if (_transRepo.IsSalaryGenerated(_employeeId, _selectedMonthKey))
             {
                 MessageBox.Show("Salary for this month has already been generated/recorded.");
-                btnSaveDue.Enabled = false;
-                btnPayNow.Enabled = false;
+                btnSaveDue!.Enabled = false;
+                btnPayNow!.Enabled = false;
                 return;
             }
 
@@ -165,7 +165,7 @@ namespace ArceliaHR
             _otEarned = perHour * (decimal)overtimeHrs;
             _totalDue = _basicEarned + _otEarned;
 
-            lblAttData.Text = $"Present Days: {presentDays} / {daysInMonth}\n" +
+            lblAttData!.Text = $"Present Days: {presentDays} / {daysInMonth}\n" +
                               $"Overtime Hours: {overtimeHrs}\n\n" +
                               $"Basic Earned: {_basicEarned:N2}\n" +
                               $"Overtime Earned: {_otEarned:N2}\n" +
@@ -192,7 +192,7 @@ namespace ArceliaHR
             
             decimal currentBalance = _transRepo.GetCurrentBalance(_employeeId);
             _advBalance = 0;
-            _fineBalance = 0;
+            //_fineBalance = 0;
 
             if (currentBalance < 0)
             {
@@ -207,23 +207,23 @@ namespace ArceliaHR
             if (defaultDeduction > _totalDue) defaultDeduction = _totalDue;
 
             // We put it all in Advance input for simplicity since we don't distinguish yet
-            numDeductAdvance.Value = defaultDeduction;
-            numDeductFine.Value = 0; // Default 0 for fine
+            numDeductAdvance!.Value = defaultDeduction;
+            numDeductFine!.Value = 0; // Default 0 for fine
             
             CalculateNetPay();
 
-            btnSaveDue.Enabled = true;
-            btnPayNow.Enabled = true;
+            btnSaveDue!.Enabled = true;
+            btnPayNow!.Enabled = true;
         }
 
         private void CalculateNetPay()
         {
-            decimal deductAdv = numDeductAdvance.Value;
-            decimal deductFine = numDeductFine.Value;
+            decimal deductAdv = numDeductAdvance!.Value;
+            decimal deductFine = numDeductFine!.Value;
             
             _netPayable = _totalDue - (deductAdv + deductFine);
             
-            lblNetPay.Text = $"Total Earnings: {_totalDue:N2}\n" +
+            lblNetPay!.Text = $"Total Earnings: {_totalDue:N2}\n" +
                              $"Less Advance: -{deductAdv:N2}\n" +
                              $"Less Fine: -{deductFine:N2}\n" +
                              $"Net Payable: {_netPayable:N2}";
@@ -241,7 +241,7 @@ namespace ArceliaHR
                     TransType = "SalaryDue",
                     Amount = _totalDue,
                     Month = _selectedMonthKey,
-                    Remarks = $"Salary for {cmbMonth.Text} {cmbYear.SelectedItem}"
+                    Remarks = $"Salary for {cmbMonth!.Text} {cmbYear!.SelectedItem}"
                 };
                 _transRepo.Add(dueTrans);
 
@@ -253,8 +253,8 @@ namespace ArceliaHR
                     
                     if (amountToPay < 0) amountToPay = 0; // Should not happen if validation is correct
 
-                    decimal deductAdv = numDeductAdvance.Value;
-                    decimal deductFine = numDeductFine.Value;
+                    decimal deductAdv = numDeductAdvance!.Value;
+                    decimal deductFine = numDeductFine!.Value;
                     
                     string payRemarks = $"Payment for {cmbMonth.Text} {cmbYear.SelectedItem}";
                     if (deductAdv > 0) payRemarks += $", Less Adv: {deductAdv:N2}";
@@ -292,7 +292,7 @@ namespace ArceliaHR
             }
         }
 
-        private System.ComponentModel.IContainer components = null;
+        private System.ComponentModel.IContainer? components = null;
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null)) components.Dispose();
