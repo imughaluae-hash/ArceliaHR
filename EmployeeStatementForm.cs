@@ -3,6 +3,7 @@ using ArceliaHR.Models;
 using System.ComponentModel;
 using System.Linq;
 using System.Drawing;
+using ArceliaHR.Services;
 
 namespace ArceliaHR
 {
@@ -14,6 +15,8 @@ namespace ArceliaHR
         private EmployeeRepository _empRepo = new EmployeeRepository();
         private AttendanceRepository _attRepo = new AttendanceRepository();
         private DataGridView? dgList;
+        private Button? btnExport;
+        private PdfService _pdfService = new PdfService();
 
         public EmployeeStatementForm(int employeeId, string employeeName)
         {
@@ -49,7 +52,14 @@ namespace ArceliaHR
                 RowHeadersVisible = false
             };
 
+            btnExport = new Button { Text = "Export to PDF", Width = 120, Height = 40, Margin = new Padding(10, 0, 0, 0) };
+            btnExport.Click += BtnExport_Click;
+
+            var pnlBottom = new FlowLayoutPanel { Dock = DockStyle.Bottom, Height = 60, FlowDirection = FlowDirection.RightToLeft, Padding = new Padding(10) };
+            pnlBottom.Controls.Add(btnExport);
+
             this.Controls.Add(dgList);
+            this.Controls.Add(pnlBottom);
             this.Controls.Add(pnlTop);
         }
 
@@ -159,6 +169,32 @@ namespace ArceliaHR
                 if (dgList.Columns[col] != null) dgList.Columns[col].DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleRight;
         }
 
+        private void BtnExport_Click(object? sender, EventArgs e)
+        {
+            var emp = _empRepo.GetById(_employeeId);
+            if (emp == null) return;
+
+            var rows = dgList!.DataSource as BindingList<StatementRow>;
+            if (rows == null) return;
+
+            using (var sfd = new SaveFileDialog { Filter = "PDF Files|*.pdf", FileName = $"Statement_{_employeeName}_{DateTime.Now:yyyyMMdd}.pdf" })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        var pdfBytes = _pdfService.GenerateStatementPdf(emp, rows.ToList());
+                        System.IO.File.WriteAllBytes(sfd.FileName, pdfBytes);
+                        MessageBox.Show("PDF exported successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error exporting PDF: {ex.Message}");
+                    }
+                }
+            }
+        }
+
         private string FormatDescription(TransactionModel t)
         {
             string desc = t.TransType;
@@ -166,6 +202,8 @@ namespace ArceliaHR
             else if (t.TransType == "SalaryPaid") desc = "Salary Payment";
             else if (t.TransType == "AdjustmentPlus") desc = "Adjustment (+)";
             else if (t.TransType == "AdjustmentMinus") desc = "Adjustment (-)";
+            else if (t.TransType == "AdvanceRecovery") desc = "Advance Recovery";
+            else if (t.TransType == "FineRecovery") desc = "Fine Recovery";
 
             if (!string.IsNullOrEmpty(t.Remarks)) desc += $" - {t.Remarks}";
             return desc;

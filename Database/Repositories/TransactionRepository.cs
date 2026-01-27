@@ -38,7 +38,7 @@ namespace ArceliaHR.Database.Repositories
                     e.Id as EmployeeId,
                     e.Name as EmployeeName,
                     e.Status,
-                    CAST(COALESCE(SUM(CASE WHEN t.TransType IN ('SalaryDue', 'AdjustmentPlus') THEN t.Amount ELSE 0 END), 0) AS REAL) as TotalPayable,
+                    CAST(COALESCE(SUM(CASE WHEN t.TransType IN ('SalaryDue', 'AdjustmentPlus', 'AdvanceRecovery', 'FineRecovery') THEN t.Amount ELSE 0 END), 0) AS REAL) as TotalPayable,
                     CAST(COALESCE(SUM(CASE WHEN t.TransType IN ('SalaryPaid', 'AdjustmentMinus') THEN t.Amount ELSE 0 END), 0) AS REAL) as TotalPaid,
                     CAST(COALESCE(SUM(CASE WHEN t.TransType = 'Advance' THEN t.Amount ELSE 0 END), 0) AS REAL) as TotalAdvance,
                     CAST(COALESCE(SUM(CASE WHEN t.TransType = 'Fine' THEN t.Amount ELSE 0 END), 0) AS REAL) as TotalFine
@@ -74,7 +74,7 @@ namespace ArceliaHR.Database.Repositories
             string sql = @"
                  SELECT 
                     CAST(
-                        COALESCE(SUM(CASE WHEN TransType IN ('SalaryDue', 'AdjustmentPlus') THEN Amount ELSE 0 END), 0) 
+                        COALESCE(SUM(CASE WHEN TransType IN ('SalaryDue', 'AdjustmentPlus', 'AdvanceRecovery', 'FineRecovery') THEN Amount ELSE 0 END), 0) 
                         - COALESCE(SUM(CASE WHEN TransType IN ('SalaryPaid', 'AdjustmentMinus', 'Advance', 'Fine') THEN Amount ELSE 0 END), 0)
                     AS REAL)
                  FROM Transactions

@@ -75,6 +75,7 @@
             btnCancel = new Button();
             empId = new TextBox();
             label36 = new Label();
+            btnExportProfile = new Button();
             toolTip1 = new ToolTip(components);
             btnClear = new Button();
             txtStatus = new TextBox();
@@ -578,6 +579,16 @@
             label36.TabIndex = 10;
             label36.Text = "Employee ID";
             // 
+            // btnExportProfile
+            // 
+            btnExportProfile.Location = new Point(302, 390);
+            btnExportProfile.Name = "btnExportProfile";
+            btnExportProfile.Size = new Size(132, 42);
+            btnExportProfile.TabIndex = 42;
+            btnExportProfile.Text = "Export Profile";
+            btnExportProfile.UseVisualStyleBackColor = true;
+            btnExportProfile.Click += btnExportProfile_Click;
+            // 
             // btnClear
             // 
             btnClear.Location = new Point(447, 484);
@@ -636,6 +647,7 @@
             Controls.Add(btnStatus);
             Controls.Add(btnCancel);
             Controls.Add(btnSave);
+            Controls.Add(btnExportProfile);
             Controls.Add(txtStatus);
             Controls.Add(empId);
             Controls.Add(groupBox4);
@@ -718,5 +730,6 @@
         private TextBox txtStatus;
         private Label label18;
         private NumericUpDown udBasicSalary;
+        private Button btnExportProfile;
     }
 }

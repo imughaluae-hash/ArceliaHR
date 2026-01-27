@@ -248,19 +248,39 @@ namespace ArceliaHR
                 // 2. If Pay Now, Save Salary Paid (Debit to Emp)
                 if (payNow)
                 {
-                    // Use the calculated Net Payable (which accounts for user-input partial deductions)
-                    decimal amountToPay = _netPayable;
-                    
-                    if (amountToPay < 0) amountToPay = 0; // Should not happen if validation is correct
-
                     decimal deductAdv = numDeductAdvance!.Value;
                     decimal deductFine = numDeductFine!.Value;
                     
-                    string payRemarks = $"Payment for {cmbMonth.Text} {cmbYear.SelectedItem}";
-                    if (deductAdv > 0) payRemarks += $", Less Adv: {deductAdv:N2}";
-                    if (deductFine > 0) payRemarks += $", Less Fine: {deductFine:N2}";
+                    // Explicitly Record Recovery Transactions first
+                    if (deductAdv > 0)
+                    {
+                        _transRepo.Add(new TransactionModel
+                        {
+                            EmployeeId = _employeeId,
+                            TransDate = DateTime.Now,
+                            TransType = "AdvanceRecovery",
+                            Amount = deductAdv,
+                            Remarks = $"Adv Recovery from {cmbMonth!.Text} {cmbYear!.SelectedItem} Salary"
+                        });
+                    }
 
-                    if (amountToPay > 0 || deductAdv > 0 || deductFine > 0)
+                    if (deductFine > 0)
+                    {
+                        _transRepo.Add(new TransactionModel
+                        {
+                            EmployeeId = _employeeId,
+                            TransDate = DateTime.Now,
+                            TransType = "FineRecovery",
+                            Amount = deductFine,
+                            Remarks = $"Fine Recovery from {cmbMonth!.Text} {cmbYear!.SelectedItem} Salary"
+                        });
+                    }
+
+                    // Use the calculated Net Payable (which accounts for user-input partial deductions)
+                    decimal amountToPay = _netPayable;
+                    if (amountToPay < 0) amountToPay = 0; 
+
+                    if (amountToPay > 0)
                     {
                         var paidTrans = new TransactionModel
                         {
@@ -268,14 +288,14 @@ namespace ArceliaHR
                             TransDate = DateTime.Now,
                             TransType = "SalaryPaid",
                             Amount = amountToPay,
-                            Remarks = payRemarks
+                            Remarks = $"Net Salary Payment - {cmbMonth!.Text} {cmbYear!.SelectedItem}"
                         };
                         _transRepo.Add(paidTrans);
-                        MessageBox.Show($"Salary Recorded & Paid! Amount: {amountToPay:N2}");
+                        MessageBox.Show($"Salary Recorded & Paid! Net: {amountToPay:N2}");
                     }
                     else
                     {
-                        MessageBox.Show("Salary Recorded. No Payout (Full Deduction cover).");
+                        MessageBox.Show("Salary Recorded. Fully settled via deductions.");
                     }
                 }
                 else
@@ -300,8 +320,15 @@ namespace ArceliaHR
         }
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            SuspendLayout();
+            // 
+            // SalaryForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(284, 261);
+            Name = "SalaryForm";
+            ResumeLayout(false);
         }
     }
 }

@@ -22,6 +22,7 @@ namespace ArceliaHR
         private BindingSource _bs = new BindingSource();
         public string? fileName;
         private bool _isNewEmployee;
+        private Services.PdfService _pdfService = new Services.PdfService();
 
 
         private void browseImage_Click(object sender, EventArgs e)
@@ -162,6 +163,28 @@ namespace ArceliaHR
             _employee.Status = _employee.Status == "Active" ? "DeActive" : "Active";
 
             txtStatus.Text = _employee.Status;
+        }
+
+        private void btnExportProfile_Click(object sender, EventArgs e)
+        {
+            if (_employee == null) return;
+
+            using (var sfd = new SaveFileDialog { Filter = "PDF Files|*.pdf", FileName = $"Profile_{_employee.Name}_{DateTime.Now:yyyyMMdd}.pdf" })
+            {
+                if (sfd.ShowDialog() == DialogResult.OK)
+                {
+                    try
+                    {
+                        var pdfBytes = _pdfService.GenerateProfilePdf(_employee);
+                        System.IO.File.WriteAllBytes(sfd.FileName, pdfBytes);
+                        MessageBox.Show("Profile PDF exported successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        MessageBox.Show($"Error exporting PDF: {ex.Message}");
+                    }
+                }
+            }
         }
         private byte[]? ImageToBytes(Image img)
         {
