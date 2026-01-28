@@ -172,43 +172,33 @@ namespace ArceliaHR
                               $"Total Earnings: {_totalDue:N2}";
 
             // 3. Get Balances (Advance/Fine)
-            // We need SEPARATE balances for Advance and Fine to control deduction limits
-            var summaries = _transRepo.GetBalanceSummaries().FirstOrDefault(s => s.EmployeeId == _employeeId);
+            // Use precise outstanding balances
+            var balances = _transRepo.GetOutstandingBalances(_employeeId);
+            _advBalance = balances.Advance;
+            decimal fineBalance = balances.Fine;
             
-            // NOTE: GetBalanceSummaries returns TOTAL Advance/Fine history, not current balance. 
-            // We need a way to know how much Advance is OUTSTANDING. 
-            // Simplified Logic: 
-            // We'll calculate TotalAdvanceTaken - TotalAdvanceRecovered (via Pay deductions)
-            // But we don't track recoveries separately yet (they are just 'SalaryPaid'). 
-            // 
-            // Alternative: Just use the total Ledger Balance. 
-            // If Ledger is negative (-500), it's likely Advance/Fine.
-            // We can distribute it.
-            // 
-            // Let's use GetCurrentBalance() -> If -500.
-            // We assume it's all Advance for defaults (or split if we had data).
-            // For now, let's just let user input what they want to deduct.
-            // We'll default the "Advance Deduction" to Min(Abs(CurrentBalance), TotalDue).
+            // Set Max Limits for Inputs (Cannot deduct more than what is owed)
+            numDeductAdvance!.Maximum = _advBalance > 0 ? _advBalance : 0;
+            numDeductFine!.Maximum = fineBalance > 0 ? fineBalance : 0;
+
+            // Default Logic: 
+            // 1. Try to recover full Advance (up to Salary limit)
+            // 2. Try to recover full Fine (up to remaining Salary limit)
             
-            decimal currentBalance = _transRepo.GetCurrentBalance(_employeeId);
-            _advBalance = 0;
-            //_fineBalance = 0;
-
-            if (currentBalance < 0)
-            {
-                // We owe company. Default to recovering all of it (up to salary amount)
-                _advBalance = Math.Abs(currentBalance); 
-            }
-
-            // Set numeric updowns limits and defaults
-            // Logic: Default deduction is whatever is outstanding, but capped at salary amount.
+            decimal deductionLimit = _totalDue;
             
-            decimal defaultDeduction = _advBalance; 
-            if (defaultDeduction > _totalDue) defaultDeduction = _totalDue;
+            decimal suggestAdv = Math.Min(_advBalance, deductionLimit);
+            deductionLimit -= suggestAdv; // Remaining room for fine
+            
+            decimal suggestFine = Math.Min(fineBalance, deductionLimit);
 
-            // We put it all in Advance input for simplicity since we don't distinguish yet
-            numDeductAdvance!.Value = defaultDeduction;
-            numDeductFine!.Value = 0; // Default 0 for fine
+            numDeductAdvance.Value = suggestAdv;
+            numDeductFine.Value = suggestFine;
+            
+            // Labels can be updated to show balance too if desired, but for now GroupBox headers are static.
+            // We could modify labels dynamically:
+            // "Advance Balance (Outstanding: 500):"
+            // But let's keep it simple for now.
             
             CalculateNetPay();
 

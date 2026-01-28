@@ -82,5 +82,32 @@ namespace ArceliaHR.Database.Repositories
             ";
             return conn.ExecuteScalar<decimal>(sql, new { EmployeeId = employeeId });
         }
+    public (decimal Advance, decimal Fine) GetOutstandingBalances(int employeeId)
+        {
+            using var conn = DbContext.Open();
+            string sql = @"
+                SELECT 
+                    CAST(COALESCE(SUM(CASE WHEN TransType = 'Advance' THEN Amount ELSE 0 END), 0) AS REAL) as TotalAdvance,
+                    CAST(COALESCE(SUM(CASE WHEN TransType = 'AdvanceRecovery' THEN Amount ELSE 0 END), 0) AS REAL) as RecoveredAdvance,
+                    
+                    CAST(COALESCE(SUM(CASE WHEN TransType = 'Fine' THEN Amount ELSE 0 END), 0) AS REAL) as TotalFine,
+                    CAST(COALESCE(SUM(CASE WHEN TransType = 'FineRecovery' THEN Amount ELSE 0 END), 0) AS REAL) as RecoveredFine
+                FROM Transactions
+                WHERE EmployeeId = @EmployeeId
+            ";
+            
+            var result = conn.QueryFirstOrDefault(sql, new { EmployeeId = employeeId });
+            
+            if (result == null) return (0, 0);
+
+            decimal outstandingAdv = (decimal)result.TotalAdvance - (decimal)result.RecoveredAdvance;
+            decimal outstandingFine = (decimal)result.TotalFine - (decimal)result.RecoveredFine;
+
+            // Ensure we don't return negative balances (if recovery somehow exceeded original due)
+            if (outstandingAdv < 0) outstandingAdv = 0;
+            if (outstandingFine < 0) outstandingFine = 0;
+
+            return (outstandingAdv, outstandingFine);
+        }
     }
 }
